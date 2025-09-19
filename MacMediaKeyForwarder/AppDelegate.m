@@ -345,9 +345,22 @@ static CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEv
     [ image setTemplate : YES ];
     
     statusItem = [ [ NSStatusBar systemStatusBar ] statusItemWithLength : NSVariableStatusItemLength ];
-    [ statusItem setToolTip : @"Mac Media Key Forwarder" ];
+    
+    // Use the button property for modern macOS versions to avoid deprecation warnings
+    NSString *tooltipText = @"Mac Media Key Forwarder";
+    if ([statusItem button]) {
+        [[statusItem button] setToolTip : tooltipText];
+        [[statusItem button] setImage : image];
+    } else {
+        // Fallback for older macOS versions
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        [ statusItem setToolTip : tooltipText ];
+        [ statusItem setImage : image ];
+        #pragma clang diagnostic pop
+    }
+    
     [ statusItem setMenu : menu ];
-    [ statusItem setImage : image ];
     [ statusItem setBehavior : NSStatusItemBehaviorRemovalAllowed ];
     if ([self shouldHideFromMenuBar]) {
         [ statusItem setVisible : NO ];
@@ -359,32 +372,44 @@ static CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEv
     [self updatePauseState];
     [self updateOptionState];
     
-    eventPort = CGEventTapCreate( kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(NX_SYSDEFINED), tapEventCallback, (__bridge void * _Nullable)(self));
-    if ( eventPort == NULL )
-    {
-    	eventPort = CGEventTapCreate( kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, NX_SYSDEFINEDMASK, tapEventCallback, (__bridge void * _Nullable)(self));
-	}
+    // Try to create event tap with proper permissions
+    // First try with CGEventMaskBit for better compatibility
+    eventPort = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(NX_SYSDEFINED), tapEventCallback, (__bridge void * _Nullable)(self));
+    
+    // Fallback to legacy mask if the first attempt fails
+    if (eventPort == NULL) {
+        eventPort = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, NX_SYSDEFINEDMASK, tapEventCallback, (__bridge void * _Nullable)(self));
+    }
 
-    if ( eventPort != NULL )
-    {
-
-		eventPortSource = CFMachPortCreateRunLoopSource( kCFAllocatorSystemDefault, eventPort, 0 );
-		
-		[self startEventSession];
-		
-	}
-	else
-	{
-		
-		NSAlert *alert = [[NSAlert alloc] init];
-		[alert setMessageText:@"Error"];
-		[alert setInformativeText:@"Cannot start event listening. Please add Mac Media Key Forwarder to the \"Security & Privacy\" pane in System Preferences. Check \"Accessibility\" and \"Automation\" under the \"Privacy\" tab."];
-		[alert addButtonWithTitle:@"Ok"];
-		[alert runModal];
-
-		exit(0);
-
-	}
+    if (eventPort != NULL) {
+        eventPortSource = CFMachPortCreateRunLoopSource(kCFAllocatorSystemDefault, eventPort, 0);
+        [self startEventSession];
+    } else {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Accessibility Permission Required"];
+        [alert setInformativeText:@"MacMediaKeyForwarder needs accessibility permission to capture media keys.\n\n"
+                                   @"1. Open System Settings\n"
+                                   @"2. Go to Privacy & Security → Accessibility\n"
+                                   @"3. Add MacMediaKeyForwarder to the list\n"
+                                   @"4. Restart the app"];
+        
+        [alert addButtonWithTitle:@"Open Settings"];
+        [alert addButtonWithTitle:@"Quit"];
+        
+        NSModalResponse response = [alert runModal];
+        if (response == NSAlertFirstButtonReturn) {
+            // Open System Settings/Preferences with version-appropriate URL
+            if (@available(macOS 13.0, *)) {
+                // macOS 13+ uses System Settings with new URL scheme
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension"]];
+            } else {
+                // macOS 12 and earlier uses System Preferences with legacy URL scheme
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"]];
+            }
+        }
+        
+        exit(0);
+    }
 
 }
 
@@ -402,7 +427,7 @@ static CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEv
 {
     if (pauseState != PauseStatePause && !CFRunLoopContainsSource(CFRunLoopGetCurrent(), eventPortSource, kCFRunLoopCommonModes)) {
         CFRunLoopAddSource( CFRunLoopGetCurrent(), eventPortSource, kCFRunLoopCommonModes );
-        CFRunLoopRun();
+        // Don't call CFRunLoopRun() - this will create a nested run loop which will block the UI on Tahoe or later
     }
 }
 
@@ -410,12 +435,25 @@ static CGEventRef tapEventCallback(CGEventTapProxy proxy, CGEventType type, CGEv
 {
     if (CFRunLoopContainsSource(CFRunLoopGetCurrent(), eventPortSource, kCFRunLoopCommonModes)) {
         CFRunLoopRemoveSource( CFRunLoopGetCurrent(), eventPortSource, kCFRunLoopCommonModes );
-        CFRunLoopStop(CFRunLoopGetCurrent());
+        // Don't call CFRunLoopStop() - this would stop the main run loop
     }
 }
 
 - ( void ) terminate
 {
+    // Clean up event tap resources before terminating
+    [self stopEventSession];
+    
+    if (eventPortSource) {
+        CFRelease(eventPortSource);
+        eventPortSource = NULL;
+    }
+    
+    if (eventPort) {
+        CFRelease(eventPort);
+        eventPort = NULL;
+    }
+    
     [ NSApp terminate : nil ];
 }
 
