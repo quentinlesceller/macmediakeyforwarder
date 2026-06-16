@@ -1,8 +1,8 @@
-# Mac Media Key Forwarder [![Build Status](https://travis-ci.org/milgra/macmediakeyforwarder.svg?branch=master)](https://travis-ci.org/milgra/macmediakeyforwarder#)
+# Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [iTunes](https://www.apple.com/itunes/) and [Spotify](http://www.spotify.com).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/) and [Spotify](https://www.spotify.com).
 
-Forwards media keys to iTunes or Spotify directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music or Spotify directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
@@ -20,21 +20,22 @@ The app listens on the event tap for key events. This causes problems in some ra
 
 In these cases simply pause Mac Media Key Forwarder from it's menu.
 
-**Installation & MacOS Mojave Compatibility**
+**Requirements**
 
-The app itself is compatible with Mojave, but you need to add it as trusted application in order to make it function properly.
+macOS 26 (Tahoe) or later. The app is signed with a Developer ID and notarized by Apple. For older systems, use version 3.1.2.
 
-You can do this with these steps:
-1. Go to **System Preferences** > **Security & Privacy**
-2. Open the **Privacy** tab, and look for **Accessibility** in the left list
-3. Turn on the checkbox for **MacMediaKeyForwarder.app** in the right list
-2. Look for **Automation** in the left list
-3. Turn on the checkbox for **iTunes.app** and **Spotifiy.app** under **MacMediaKeyForwarder.app** in the right list
-4. Run the app again
+**Installation & permissions**
 
-![Security Setting](security_a.png)
+Mac Media Key Forwarder needs two permissions to work:
 
-![Security Setting](security_b.png)
+- **Accessibility**, so it can listen for the media keys on your keyboard.
+- **Automation**, so it can tell Apple Music and Spotify to play, pause, or skip. This is why macOS shows an automation (osascript) prompt the first time you use a media key. The app only sends standard playback commands to those two apps and nothing else.
+
+To grant them:
+1. Open **System Settings** > **Privacy & Security**.
+2. Under **Accessibility**, turn on **MacMediaKeyForwarder**.
+3. Under **Automation**, allow **MacMediaKeyForwarder** to control **Music** and **Spotify**.
+4. Launch the app again if needed.
 
 **Other milgra utilities you might be interested in**
 
@@ -70,6 +71,14 @@ You can do this with these steps:
 Thank you!!!
 
 ---
+
+*What's new in version 4.0.0 :*
+- Rewritten in Swift.
+- Fixes the freeze and hang on macOS Tahoe (the menu and app no longer become unresponsive).
+- Signed with a Developer ID and notarized by Apple, so it launches without Gatekeeper warnings.
+- Modern launch at login using SMAppService.
+- Minimum macOS is now Tahoe (26). Use version 3.1.2 for older systems.
+- New bundle identifier (com.quentinlesceller.macmediakeyforwarder). After updating you may need to re-grant Accessibility and Automation permissions once.
 
 *What's new in version 3.1.2 :*
 - Lower minimum version to macOS 10.14
