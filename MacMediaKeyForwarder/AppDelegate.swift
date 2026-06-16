@@ -262,8 +262,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // Version string.
         let info = Bundle.main.infoDictionary ?? [:]
         let shortVersion = info["CFBundleShortVersionString"] as? String ?? ""
-        let buildVersion = info["CFBundleVersion"] as? String ?? ""
-        let versionString = "Version \(shortVersion) (build \(buildVersion))"
+        let versionString = "Version \(shortVersion)"
 
         let menu = NSMenu()
         menu.delegate = self
