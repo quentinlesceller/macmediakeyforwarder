@@ -23,7 +23,7 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string></string>
+	<string>MacMediaKeyForwarder controls Apple Music and Spotify (play, pause, next, previous) in response to your keyboard's media keys.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>2017. Milan Toth. No rights reserved.</string>
 	<key>NSMainNibFile</key>

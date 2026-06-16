@@ -388,17 +388,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_ENTITLEMENTS = MacMediaKeyForwarder/MacMediaKeyForwarder.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9K3SQ64X5H;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = 9K3SQ64X5H;
 				INFOPLIST_FILE = MacMediaKeyForwarder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 3.1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.milgra.hsmke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quentinlesceller.macmediakeyforwarder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
@@ -409,17 +410,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_ENTITLEMENTS = MacMediaKeyForwarder/MacMediaKeyForwarder.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9K3SQ64X5H;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = 9K3SQ64X5H;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMediaKeyForwarder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 3.1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.milgra.hsmke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quentinlesceller.macmediakeyforwarder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
