@@ -356,17 +356,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     private func startEventSession() {
         guard let eventPortSource = eventPortSource else { return }
+        // Add the tap source to the AppKit main run loop. We must NOT call
+        // CFRunLoopRun() here: NSApplicationMain already runs the main loop, so a
+        // nested run loop would block applicationDidFinishLaunching and freeze the
+        // UI on macOS Tahoe (#26/#29/#30). The already-running loop services the source.
         if pauseState != .pause && !CFRunLoopContainsSource(CFRunLoopGetCurrent(), eventPortSource, .commonModes) {
             CFRunLoopAddSource(CFRunLoopGetCurrent(), eventPortSource, .commonModes)
-            CFRunLoopRun()
         }
     }
 
     private func stopEventSession() {
         guard let eventPortSource = eventPortSource else { return }
+        // Only remove the source; do NOT call CFRunLoopStop(), which would stop the
+        // AppKit main run loop and effectively kill the app.
         if CFRunLoopContainsSource(CFRunLoopGetCurrent(), eventPortSource, .commonModes) {
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), eventPortSource, .commonModes)
-            CFRunLoopStop(CFRunLoopGetCurrent())
         }
     }
 
