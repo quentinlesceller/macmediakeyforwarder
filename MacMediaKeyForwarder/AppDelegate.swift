@@ -439,10 +439,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: Startup item
 
     @objc private func toggleStartupItem() {
-        if LaunchAtLogin.isLoginItem {
-            LaunchAtLogin.removeAppFromLoginItems()
+        if LaunchAtLogin.isEnabled {
+            LaunchAtLogin.disable()
         } else {
-            LaunchAtLogin.addAppAsLoginItem()
+            LaunchAtLogin.enable()
         }
         updateStartupItemState()
     }
@@ -450,8 +450,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc private func hideFromMenuBar() {
         setHideFromMenuBar(true)
 
-        if !LaunchAtLogin.isLoginItem {
-            LaunchAtLogin.addAppAsLoginItem()
+        if !LaunchAtLogin.isEnabled {
+            LaunchAtLogin.enable()
         }
 
         statusItem.isVisible = false
@@ -485,7 +485,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     private func updateStartupItemState() {
-        startupItem.state = LaunchAtLogin.isLoginItem ? .on : .off
+        startupItem.state = LaunchAtLogin.isEnabled ? .on : .off
     }
 
     func menuWillOpen(_ menu: NSMenu) {
