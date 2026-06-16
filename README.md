@@ -31,11 +31,9 @@ Mac Media Key Forwarder needs two permissions to work:
 - **Accessibility**, so it can listen for the media keys on your keyboard.
 - **Automation**, so it can tell Apple Music and Spotify to play, pause, or skip. This is why macOS shows an automation (osascript) prompt the first time you use a media key. The app only sends standard playback commands to those two apps and nothing else.
 
-To grant them:
-1. Open **System Settings** > **Privacy & Security**.
-2. Under **Accessibility**, turn on **MacMediaKeyForwarder**.
-3. Under **Automation**, allow **MacMediaKeyForwarder** to control **Music** and **Spotify**.
-4. Launch the app again if needed.
+On first launch the app asks for Accessibility access and offers an **Open System Settings** button. Turn on **MacMediaKeyForwarder** under **Privacy & Security** > **Accessibility**, and the app starts forwarding right away. There is no need to relaunch it.
+
+The Automation permission is requested the first time you press a media key. Allow **MacMediaKeyForwarder** to control **Music** and **Spotify** when prompted.
 
 **Other milgra utilities you might be interested in**
 
