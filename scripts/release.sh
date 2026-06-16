@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 #
-# Build, sign, notarize and staple a distributable MacMediaKeyForwarder.app.
+# Build, sign, notarize and staple a distributable MacMediaKeyForwarder.dmg.
+#
+# This uses the canonical Apple flow: xcodebuild archive -> exportArchive with a
+# Developer ID ExportOptions.plist (Xcode signs the app with a secure timestamp
+# and the Hardened Runtime), then notarize and staple both the app and the dmg.
 #
 # One-time setup (stores an app-specific password in the keychain):
 #
@@ -15,69 +19,83 @@ set -euo pipefail
 
 # ---- Config ---------------------------------------------------------------
 PROJECT="MacMediaKeyForwarder.xcodeproj"
-TARGET="MacMediaKeyForwarder"
+SCHEME="MacMediaKeyForwarder"
 CONFIG="Release"
+APP_NAME="MacMediaKeyForwarder"
+VOL_NAME="Mac Media Key Forwarder"
 IDENTITY="Developer ID Application: Quentin Le Sceller (9K3SQ64X5H)"
-ENTITLEMENTS="MacMediaKeyForwarder/MacMediaKeyForwarder.entitlements"
-NOTARY_PROFILE="${NOTARY_PROFILE:-mmkf-notary}"   # keychain profile name from store-credentials
+NOTARY_PROFILE="${NOTARY_PROFILE:-mmkf-notary}"   # keychain profile from store-credentials
 XCODEBUILD="${XCODEBUILD:-/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-APP="build/$CONFIG/$TARGET.app"
+BUILD_DIR="build/release"
+ARCHIVE="$BUILD_DIR/$APP_NAME.xcarchive"
+EXPORT_DIR="$BUILD_DIR/export"
+APP="$EXPORT_DIR/$APP_NAME.app"
 DIST_DIR="dist"
-ZIP="$DIST_DIR/$TARGET.zip"
+DMG="$DIST_DIR/$APP_NAME.dmg"
 
-# ---- 1. Build -------------------------------------------------------------
-echo "==> Building $CONFIG (universal)…"
-"$XCODEBUILD" -project "$PROJECT" -target "$TARGET" -configuration "$CONFIG" \
-    clean build >/tmp/mmkf-build.log 2>&1 \
-    || { echo "Build failed; see /tmp/mmkf-build.log"; tail -20 /tmp/mmkf-build.log; exit 1; }
-[ -d "$APP" ] || { echo "App not found at $APP"; exit 1; }
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR" "$DIST_DIR"
 
-# ---- 2. Deep re-sign for distribution -------------------------------------
-# Sign nested code inside-out first, then the app bundle. We pass our own
-# entitlements (no get-task-allow) and --timestamp for a secure timestamp;
-# both are required for notarization.
-echo "==> Re-signing nested frameworks/dylibs…"
-find "$APP/Contents/Frameworks" \( -name "*.dylib" -o -name "*.framework" \) -print0 2>/dev/null |
-    while IFS= read -r -d '' item; do
-        codesign --force --options runtime --timestamp --sign "$IDENTITY" "$item"
-    done
+# ---- 1. Archive -----------------------------------------------------------
+echo "==> Archiving $SCHEME ($CONFIG, universal)…"
+"$XCODEBUILD" -project "$PROJECT" -scheme "$SCHEME" -configuration "$CONFIG" \
+    -archivePath "$ARCHIVE" \
+    archive >/tmp/mmkf-archive.log 2>&1 \
+    || { echo "Archive failed; see /tmp/mmkf-archive.log"; tail -20 /tmp/mmkf-archive.log; exit 1; }
 
-echo "==> Re-signing app bundle…"
-codesign --force --options runtime --timestamp \
-    --entitlements "$ENTITLEMENTS" \
-    --sign "$IDENTITY" "$APP"
+# ---- 2. Export with Developer ID ------------------------------------------
+echo "==> Exporting Developer ID app…"
+"$XCODEBUILD" -exportArchive \
+    -archivePath "$ARCHIVE" \
+    -exportPath "$EXPORT_DIR" \
+    -exportOptionsPlist "scripts/ExportOptions.plist" >/tmp/mmkf-export.log 2>&1 \
+    || { echo "Export failed; see /tmp/mmkf-export.log"; tail -20 /tmp/mmkf-export.log; exit 1; }
+[ -d "$APP" ] || { echo "Exported app not found at $APP"; exit 1; }
 
-# ---- 3. Verify signature --------------------------------------------------
-echo "==> Verifying signature…"
+# ---- 3. Verify the exported signature -------------------------------------
+echo "==> Verifying exported signature…"
 codesign --verify --deep --strict --verbose=2 "$APP"
 if codesign -d --entitlements :- "$APP" 2>/dev/null | grep -q "get-task-allow"; then
-    echo "ERROR: get-task-allow still present — notarization will fail."; exit 1
+    echo "ERROR: get-task-allow present in exported app; notarization would fail."; exit 1
 fi
+echo "    version:   $(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Contents/Info.plist")"
+echo "    bundle id: $(codesign -dvv "$APP" 2>&1 | awk -F= '/^Identifier=/{print $2}')"
 
-# ---- 4. Zip for submission ------------------------------------------------
-echo "==> Zipping…"
-mkdir -p "$DIST_DIR"
-rm -f "$ZIP"
-/usr/bin/ditto -c -k --keepParent "$APP" "$ZIP"
-
-# ---- 5. Notarize ----------------------------------------------------------
-echo "==> Submitting to notary service (profile: $NOTARY_PROFILE)…"
-xcrun notarytool submit "$ZIP" --keychain-profile "$NOTARY_PROFILE" --wait
-
-# ---- 6. Staple + re-zip the stapled app -----------------------------------
-echo "==> Stapling…"
+# ---- 4. Notarize and staple the app ---------------------------------------
+APP_ZIP="$BUILD_DIR/$APP_NAME.zip"
+echo "==> Notarizing the app (profile: $NOTARY_PROFILE)…"
+/usr/bin/ditto -c -k --keepParent "$APP" "$APP_ZIP"
+xcrun notarytool submit "$APP_ZIP" --keychain-profile "$NOTARY_PROFILE" --wait
+echo "==> Stapling the app…"
 xcrun stapler staple "$APP"
-rm -f "$ZIP"
-/usr/bin/ditto -c -k --keepParent "$APP" "$ZIP"
 
-# ---- 7. Final gatekeeper verification -------------------------------------
+# ---- 5. Build the DMG (with an Applications symlink) ----------------------
+echo "==> Building DMG…"
+STAGING="$(mktemp -d)"
+cp -R "$APP" "$STAGING/"
+ln -s /Applications "$STAGING/Applications"
+rm -f "$DMG"
+hdiutil create -volname "$VOL_NAME" -srcfolder "$STAGING" -ov -format UDZO "$DMG" >/dev/null
+rm -rf "$STAGING"
+
+# ---- 6. Sign, notarize and staple the DMG ---------------------------------
+echo "==> Signing DMG…"
+codesign --force --sign "$IDENTITY" --timestamp "$DMG"
+echo "==> Notarizing DMG…"
+xcrun notarytool submit "$DMG" --keychain-profile "$NOTARY_PROFILE" --wait
+echo "==> Stapling DMG…"
+xcrun stapler staple "$DMG"
+
+# ---- 7. Final verification ------------------------------------------------
 echo "==> Verifying with Gatekeeper…"
-xcrun stapler validate "$APP"
+xcrun stapler validate "$DMG"
+spctl -a -t open --context context:primary-signature -vvv "$DMG" || true
 spctl -a -vvv "$APP"
 
 echo
-echo "Done. Distributable: $ZIP"
+echo "Done. Distributable: $DMG"
+echo "SHA-256: $(shasum -a 256 "$DMG" | cut -d' ' -f1)"
