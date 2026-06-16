@@ -9,6 +9,7 @@
 //  status-bar menu to control prioritization, pausing and launch-at-login.
 //
 
+import ApplicationServices
 import Cocoa
 import CoreServices
 import ScriptingBridge
@@ -90,6 +91,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var statusItem: NSStatusItem!
     private var eventPort: CFMachPort?
     private var eventPortSource: CFRunLoopSource?
+    private var accessibilityPollTimer: Timer?
     private var priorityOptionItems: [NSMenuItem] = []
     private var pauseOptionItems: [NSMenuItem] = []
     private var startupItem: NSMenuItem!
@@ -323,24 +325,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updatePauseState()
         updateOptionState()
 
-        let mask = CGEventMask(1) << CGEventMask(kSystemDefinedEventTypeRawValue)
-        eventPort = CGEvent.tapCreate(tap: .cgSessionEventTap,
-                                      place: .headInsertEventTap,
-                                      options: .defaultTap,
-                                      eventsOfInterest: mask,
-                                      callback: tapEventCallback,
-                                      userInfo: Unmanaged.passUnretained(self).toOpaque())
-
-        if let eventPort = eventPort {
-            eventPortSource = CFMachPortCreateRunLoopSource(kCFAllocatorSystemDefault, eventPort, 0)
-            startEventSession()
-        } else {
-            let alert = NSAlert()
-            alert.messageText = "Error"
-            alert.informativeText = "Cannot start event listening. Please add Mac Media Key Forwarder to the \"Security & Privacy\" pane in System Preferences. Check \"Accessibility\" and \"Automation\" under the \"Privacy\" tab."
-            alert.addButton(withTitle: "Ok")
-            alert.runModal()
-            exit(0)
+        if !startEventTap() {
+            // Accessibility has not been granted yet. Ask for it the modern way
+            // (a system prompt with an "Open System Settings" button) and start
+            // forwarding automatically once it is granted, with no relaunch.
+            requestAccessibilityPermission()
         }
     }
 
@@ -350,6 +339,43 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             statusItem.isVisible = true
         }
         return true
+    }
+
+    // MARK: - Event tap & permissions
+
+    /// Creates the media-key event tap and starts the session. Returns false if
+    /// the tap could not be created, which normally means Accessibility access
+    /// has not been granted yet.
+    @discardableResult
+    private func startEventTap() -> Bool {
+        let mask = CGEventMask(1) << CGEventMask(kSystemDefinedEventTypeRawValue)
+        eventPort = CGEvent.tapCreate(tap: .cgSessionEventTap,
+                                      place: .headInsertEventTap,
+                                      options: .defaultTap,
+                                      eventsOfInterest: mask,
+                                      callback: tapEventCallback,
+                                      userInfo: Unmanaged.passUnretained(self).toOpaque())
+        guard let eventPort = eventPort else { return false }
+        eventPortSource = CFMachPortCreateRunLoopSource(kCFAllocatorSystemDefault, eventPort, 0)
+        startEventSession()
+        return true
+    }
+
+    /// Triggers the standard macOS Accessibility prompt (which offers an "Open
+    /// System Settings" button) and then polls until the permission is granted,
+    /// starting the event tap as soon as it succeeds. No relaunch required.
+    private func requestAccessibilityPermission() {
+        let promptKey = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
+        _ = AXIsProcessTrustedWithOptions([promptKey: true] as CFDictionary)
+
+        accessibilityPollTimer?.invalidate()
+        accessibilityPollTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self = self else { timer.invalidate(); return }
+            if self.startEventTap() {
+                timer.invalidate()
+                self.accessibilityPollTimer = nil
+            }
+        }
     }
 
     // MARK: - Event session
