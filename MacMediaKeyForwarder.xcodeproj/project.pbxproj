@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3333F8972198687500816A9F /* GBLaunchAtLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3333F8942198687500816A9F /* GBLaunchAtLogin.m */; };
-		336F744D1E07E136009BCC1B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 336F744C1E07E136009BCC1B /* AppDelegate.m */; };
-		336F74501E07E136009BCC1B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 336F744F1E07E136009BCC1B /* main.m */; };
+		D1B0000000000000000000A1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A1 /* main.swift */; };
+		D1B0000000000000000000A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A2 /* AppDelegate.swift */; };
+		D1B0000000000000000000A3 /* MediaApplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A3 /* MediaApplications.swift */; };
+		D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A4 /* LaunchAtLogin.swift */; };
 		336F74521E07E136009BCC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336F74511E07E136009BCC1B /* Assets.xcassets */; };
 		336F74551E07E136009BCC1B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 336F74531E07E136009BCC1B /* MainMenu.xib */; };
 		336F74651E07E4F6009BCC1B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336F74641E07E4F6009BCC1B /* CoreAudio.framework */; };
@@ -30,26 +31,23 @@
 		330630142313F6DE00ACFBFE /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3319A9E81E085353005DB79C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		3319A9E91E085353005DB79C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		3333F8922198687500816A9F /* GBLaunchAtLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLaunchAtLogin.h; sourceTree = "<group>"; };
 		3333F8932198687500816A9F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		3333F8942198687500816A9F /* GBLaunchAtLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLaunchAtLogin.m; sourceTree = "<group>"; };
 		3333F8952198687500816A9F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D1A0000000000000000000A4 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		336F74481E07E136009BCC1B /* MacMediaKeyForwarder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMediaKeyForwarder.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		336F744B1E07E136009BCC1B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		336F744C1E07E136009BCC1B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		336F744F1E07E136009BCC1B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D1A0000000000000000000A1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		D1A0000000000000000000A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D1A0000000000000000000A3 /* MediaApplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaApplications.swift; sourceTree = "<group>"; };
 		336F74511E07E136009BCC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		336F74541E07E136009BCC1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		336F74561E07E136009BCC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		336F74641E07E4F6009BCC1B /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		337268BF1F8BA311007284E3 /* Spotify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spotify.h; sourceTree = "<group>"; };
 		338A08AF2028840D001F1ED3 /* manualtest.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = manualtest.txt; sourceTree = "<group>"; };
 		3397086D21EB6B7B009F3857 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3397086E21EB6B8F009F3857 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3397086F21EB6B9C009F3857 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33B952841FD6E8C5003EE4CD /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = SOURCE_ROOT; };
 		33CD48BE1F866DB7000C454F /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
-		33CD48C11F866DC6000C454F /* iTunes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		33CD48C71F8671B6000C454F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		33CD48C91F86724F000C454F /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		33E2CC3D21B1361E002F8094 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -76,9 +74,8 @@
 		3333F8912198687500816A9F /* GBLaunchAtLogin */ = {
 			isa = PBXGroup;
 			children = (
-				3333F8922198687500816A9F /* GBLaunchAtLogin.h */,
+				D1A0000000000000000000A4 /* LaunchAtLogin.swift */,
 				3333F8932198687500816A9F /* LICENSE */,
-				3333F8942198687500816A9F /* GBLaunchAtLogin.m */,
 				3333F8952198687500816A9F /* README.md */,
 			);
 			name = GBLaunchAtLogin;
@@ -105,10 +102,8 @@
 		336F744A1E07E136009BCC1B /* MacMediaKeyForwarder */ = {
 			isa = PBXGroup;
 			children = (
-				33CD48C11F866DC6000C454F /* iTunes.h */,
-				337268BF1F8BA311007284E3 /* Spotify.h */,
-				336F744B1E07E136009BCC1B /* AppDelegate.h */,
-				336F744C1E07E136009BCC1B /* AppDelegate.m */,
+				D1A0000000000000000000A2 /* AppDelegate.swift */,
+				D1A0000000000000000000A3 /* MediaApplications.swift */,
 				336F744E1E07E136009BCC1B /* Supporting Files */,
 			);
 			path = MacMediaKeyForwarder;
@@ -127,7 +122,7 @@
 				3319A9E81E085353005DB79C /* LICENSE */,
 				3319A9E91E085353005DB79C /* README.md */,
 				338A08AF2028840D001F1ED3 /* manualtest.txt */,
-				336F744F1E07E136009BCC1B /* main.m */,
+				D1A0000000000000000000A1 /* main.swift */,
 				A5999C4E1FF3BB89009905E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
@@ -235,9 +230,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3333F8972198687500816A9F /* GBLaunchAtLogin.m in Sources */,
-				336F74501E07E136009BCC1B /* main.m in Sources */,
-				336F744D1E07E136009BCC1B /* AppDelegate.m in Sources */,
+				D1B0000000000000000000A2 /* AppDelegate.swift in Sources */,
+				D1B0000000000000000000A3 /* MediaApplications.swift in Sources */,
+				D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */,
+				D1B0000000000000000000A1 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +324,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -378,6 +377,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
