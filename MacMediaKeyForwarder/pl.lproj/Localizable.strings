@@ -18,3 +18,5 @@
 "Quit" = "Wyjdź";
 "OK" = "OK";
 "Cancel" = "Anuluj";
+"Prioritize Cider" = "Priorytetyzuj Cider";
+"Set Cider API Token…" = "Ustaw token API Cider…";

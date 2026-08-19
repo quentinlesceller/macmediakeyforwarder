@@ -1,12 +1,19 @@
 # Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/) and [Spotify](https://www.spotify.com).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com) and [Cider](https://cider.sh).
 
-Forwards your keyboard media keys (play/pause, next, previous) to Apple Music or Spotify directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify or Cider directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
 The app runs in the menu bar.
+
+**Cider support**
+
+Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cider does not ship an AppleScript dictionary, so it is controlled through its local REST API instead (`http://localhost:10767`). For it to work:
+
+- In Cider, enable the RPC server under **Settings** > **Connectivity**.
+- If Cider requires a token for external applications (**Manage External Application Access to Cider**), copy it into Mac Media Key Forwarder via **Set Cider API Token…** in the menu.
 
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 

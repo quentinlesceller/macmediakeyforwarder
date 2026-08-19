@@ -24,6 +24,13 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- Cider is controlled through its local REST API over cleartext
+		     HTTP on 127.0.0.1; allow loopback/local networking explicitly. -->
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>MacMediaKeyForwarder controls Apple Music and Spotify (play, pause, next, previous) in response to your keyboard's media keys.</string>
 	<key>NSHumanReadableCopyright</key>

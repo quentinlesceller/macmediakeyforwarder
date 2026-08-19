@@ -5,8 +5,9 @@
 //  Swift port of the original Objective-C AppDelegate by Milan Toth.
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
-//  forwards them to iTunes/Music and/or Spotify over Scripting Bridge, with a
-//  status-bar menu to control prioritization, pausing and launch-at-login.
+//  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
+//  Cider over its local REST API, with a status-bar menu to control
+//  prioritization, pausing and launch-at-login.
 //
 
 import ApplicationServices
@@ -21,19 +22,21 @@ import ScriptingBridge
 // keep working after the migration.
 
 enum MediaKeysPrioritize: Int {
-    // Normal behavior (no priority; send events to iTunes and Spotify if both are open).
+    // Normal behavior (no priority; send events to every player that is open).
     case none = 0
-    // If both apps are open, prioritize iTunes over Spotify.
+    // If several apps are open, prioritize iTunes.
     case iTunes = 1
-    // If both apps are open, prioritize Spotify over iTunes.
+    // If several apps are open, prioritize Spotify.
     case spotify = 2
+    // If several apps are open, prioritize Cider.
+    case cider = 3
 }
 
 enum PauseState: Int {
     case none = 0
     // Forwarding paused.
     case pause = 1
-    // Pause automatically when neither iTunes nor Spotify is running.
+    // Pause automatically when no supported player is running.
     case automatic = 2
 }
 
@@ -85,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var pauseState: PauseState = .none
     private var keyHoldStatus: KeyHoldState = .none
     private var mediaKeysPriority: MediaKeysPrioritize = .none
+    private let ciderController = CiderController()
 
     // MARK: UI / system
 
@@ -151,13 +155,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         let musicRunning = musicApp?.isRunning ?? false
         let spotifyRunning = spotifyApp?.isRunning ?? false
+        let ciderRunning = ciderController.isRunning
 
         if pauseState == .pause {
             return Unmanaged.passUnretained(event)
         }
 
         if pauseState == .automatic {
-            if !spotifyRunning && !musicRunning {
+            if !spotifyRunning && !musicRunning && !ciderRunning {
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -197,17 +202,31 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 default:
                     break
                 }
+            case .cider:
+                switch keyCode {
+                case NX_KEYTYPE_PLAY:
+                    ciderController.playPause()
+                case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                    ciderController.nextTrack()
+                case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                    ciderController.previousTrack()
+                default:
+                    break
+                }
             case .none:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
                     if spotifyRunning { spotify?.playpause?() }
                     if musicRunning { iTunes?.playpause?() }
+                    if ciderRunning { ciderController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { iTunes?.nextTrack?() }
+                    if ciderRunning { ciderController.nextTrack() }
                 case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
                     if spotifyRunning { spotify?.previousTrack?() }
                     if musicRunning { iTunes?.backTrack?() }
+                    if ciderRunning { ciderController.previousTrack() }
                 default:
                     break
                 }
@@ -287,6 +306,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotify", comment: "Prioritize Spotify"),
                                                 action: #selector(prioritizeSpotify),
                                                 keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Cider", comment: "Prioritize Cider"),
+                                                action: #selector(prioritizeCider),
+                                                keyEquivalent: ""))
+        menu.addItem(withTitle: NSLocalizedString("Set Cider API Token…", comment: "Set Cider API Token…"),
+                     action: #selector(setCiderApiToken),
+                     keyEquivalent: "")
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
@@ -435,6 +460,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         mediaKeysPriority = .spotify
         UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
         updateOptionState()
+    }
+
+    @objc private func prioritizeCider() {
+        mediaKeysPriority = .cider
+        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
+        updateOptionState()
+    }
+
+    // MARK: Cider API token
+
+    @objc private func setCiderApiToken() {
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("Cider API Token", comment: "Cider API Token")
+        alert.informativeText = NSLocalizedString("Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.", comment: "Cider API token explanation")
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel"))
+
+        let tokenField = NSTextField(frame: NSRect(x: 0, y: 0, width: 280, height: 24))
+        tokenField.stringValue = ciderController.apiToken ?? ""
+        alert.accessoryView = tokenField
+        alert.window.initialFirstResponder = tokenField
+
+        // The app is a background (LSUIElement) app, so bring the dialog forward.
+        NSApp.activate(ignoringOtherApps: true)
+        if alert.runModal() == .alertFirstButtonReturn {
+            ciderController.apiToken = tokenField.stringValue
+        }
     }
 
     @objc private func manualPause() {
