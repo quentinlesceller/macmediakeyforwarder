@@ -6,7 +6,7 @@
   Copyright © 2018년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Отправлять события на оба плеера";
+"Send events to all players" = "Отправлять события на все плееры";
 "Prioritize iTunes" = "Предпочитать iTunes";
 "Prioritize Spotify" = "Предпочитать Spotify";
 "Pause" = "Пауза";

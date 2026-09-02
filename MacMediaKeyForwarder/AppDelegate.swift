@@ -297,7 +297,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
-        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Send events to both players", comment: "Send events to both players"),
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Send events to all players", comment: "Send events to all players"),
                                                 action: #selector(prioritizeNone),
                                                 keyEquivalent: ""))
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize iTunes", comment: "Prioritize iTunes"),

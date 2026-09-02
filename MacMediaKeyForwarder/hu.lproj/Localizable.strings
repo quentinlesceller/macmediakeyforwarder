@@ -6,7 +6,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Események küldése mindkét lejátszónak";
+"Send events to all players" = "Események küldése minden lejátszónak";
 "Open at login" = "Automatikus megnyitás bejelentkezéskor";
 "Prioritize iTunes" = "Az iTunes fontosabb";
 "Prioritize Spotify" = "A Spotify fontosabb";

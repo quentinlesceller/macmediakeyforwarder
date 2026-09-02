@@ -6,7 +6,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "iTunes, Spotify에 모두 이벤트 보내기";
+"Send events to all players" = "모든 플레이어에 이벤트 보내기";
 "Open at login" = "부팅시 자동 실행";
 "Prioritize iTunes" = "iTunes에 우선권 부여";
 "Prioritize Spotify" = "Spotify에 우선권 부여";

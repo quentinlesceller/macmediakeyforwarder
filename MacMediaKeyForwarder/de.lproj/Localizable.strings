@@ -6,7 +6,7 @@
   Copyright © 2018년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Eingaben an beide Player senden";
+"Send events to all players" = "Eingaben an alle Player senden";
 "Open at login" = "Beim Start öffnen";
 "Prioritize iTunes" = "iTunes priorisieren";
 "Prioritize Spotify" = "Spotify priorisieren";

@@ -6,7 +6,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Stuur events naar beide spelers";
+"Send events to all players" = "Stuur events naar alle spelers";
 "Open at login" = "Openen bij inloggen";
 "Prioritize iTunes" = "Prioriteer iTunes";
 "Prioritize Spotify" = "Prioriteer Spotify";
