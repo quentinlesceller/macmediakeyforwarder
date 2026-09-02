@@ -20,16 +20,6 @@ final class CiderController {
 
     static let apiTokenKey = "user_cider_api_token"
 
-    // Bundle identifiers used across Cider releases (Cider 2, Cider Classic).
-    // Only used to detect whether Cider is running; the transport commands go
-    // over HTTP, which cannot accidentally launch the app the way sending an
-    // Apple Event through Scripting Bridge can.
-    private static let bundleIdentifiers: Set<String> = [
-        "sh.cider.genten",   // Cider 2
-        "sh.cider.electron", // Cider Classic (1.x)
-        "cider",             // Cider 1.x electron-builder appId
-    ]
-
     private let session: URLSession
 
     init() {
@@ -41,10 +31,16 @@ final class CiderController {
         session = URLSession(configuration: configuration)
     }
 
+    // Cider's bundle identifier has changed across releases (Cider 2 4.x:
+    // sh.cider.genten.mac; earlier Cider 2: sh.cider.genten; Cider Classic:
+    // sh.cider.electron; the first 1.x builds: a bare "cider"), so match the
+    // sh.cider. prefix rather than an exact list. Only used to detect whether
+    // Cider is running; the transport commands go over HTTP, which cannot
+    // accidentally launch the app the way an Apple Event can.
     var isRunning: Bool {
         NSWorkspace.shared.runningApplications.contains { application in
             guard let identifier = application.bundleIdentifier else { return false }
-            return Self.bundleIdentifiers.contains(identifier)
+            return identifier.hasPrefix("sh.cider.") || identifier == "cider"
         }
     }
 
