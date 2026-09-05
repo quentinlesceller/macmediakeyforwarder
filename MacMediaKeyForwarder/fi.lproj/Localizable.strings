@@ -6,7 +6,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Ohjaa molempia soittimia";
+"Send events to all players" = "Ohjaa kaikkia soittimia";
 "Open at login" = "Avaa sisäänkirjautuessa";
 "Hide from menu bar" = "Piilota valikkoriviltä";
 "Prioritize iTunes" = "iTunes etusijalla";
@@ -18,3 +18,4 @@
 "Quit" = "Sulje";
 "OK" = "OK";
 "Cancel" = "Peruuta";
+"Prioritize Cider" = "Cider etusijalla";

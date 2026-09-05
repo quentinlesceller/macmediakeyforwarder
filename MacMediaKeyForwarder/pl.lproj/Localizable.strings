@@ -7,7 +7,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Wyślij zdarzenie do obu odtwarzaczy";
+"Send events to all players" = "Wyślij zdarzenie do wszystkich odtwarzaczy";
 "Open at login" = "Otwórz przy zalogowaniu";
 "Prioritize iTunes" = "Priorytetyzuj iTunes";
 "Prioritize Spotify" = "Priorytetyzuj Spotify";
@@ -18,3 +18,5 @@
 "Quit" = "Wyjdź";
 "OK" = "OK";
 "Cancel" = "Anuluj";
+"Prioritize Cider" = "Priorytetyzuj Cider";
+"Set Cider API Token…" = "Ustaw token API Cider…";

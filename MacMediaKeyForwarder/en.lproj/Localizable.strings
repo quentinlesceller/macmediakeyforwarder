@@ -6,7 +6,7 @@
   Copyright © 2017년 Milan Toth. All rights reserved.
 */
 
-"Send events to both players" = "Send events to both players";
+"Send events to all players" = "Send events to all players";
 "Open at login" = "Open at login";
 "Prioritize iTunes" = "Prioritize iTunes";
 "Prioritize Spotify" = "Prioritize Spotify";
@@ -17,3 +17,7 @@
 "Quit" = "Quit";
 "OK" = "OK";
 "Cancel" = "Cancel";
+"Prioritize Cider" = "Prioritize Cider";
+"Set Cider API Token…" = "Set Cider API Token…";
+"Cider API Token" = "Cider API Token";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.";
