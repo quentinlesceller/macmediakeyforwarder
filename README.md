@@ -77,6 +77,12 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.1.0 :*
+- Cider support: play/pause, next and previous now also work with [Cider](https://cider.sh) (controlled through its local REST API — enable the RPC server in Cider under Settings > Connectivity, and use "Set Cider API Token…" in the menu if Cider requires a token).
+- New "Prioritize Cider" option.
+- The default mode is now called "Send events to all players" and includes Cider.
+- Thanks to @andrwmai for testing!
+
 *What's new in version 4.0.0 :*
 - Rewritten in Swift.
 - Fixes the freeze and hang on macOS Tahoe (the menu and app no longer become unresponsive).
