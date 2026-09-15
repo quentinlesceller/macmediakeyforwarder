@@ -12,7 +12,6 @@
 "Prioritize Spotify" = "Prioriteer Spotify";
 "Pause" = "Pauze";
 "Pause if no player is running" = "Pauzeren als er geen speler geopend is";
-"Donate if you like the app" = "Doneren";
 "Check for updates" = "Controleer op updates";
 "Quit" = "Afsluiten";
 "OK" = "OK";
@@ -20,3 +19,13 @@
 "Prioritize Cider" = "Prioriteer Cider";
 "Prioritize Spotifast" = "Prioriteer Spotifast";
 "Set Cider API Token…" = "Cider API-token instellen…";
+"Settings…" = "Instellingen…";
+"Settings" = "Instellingen";
+"General" = "Algemeen";
+"Players" = "Spelers";
+"Media key forwarding" = "Doorsturen van mediatoetsen";
+"On" = "Aan";
+"Paused" = "Gepauzeerd";
+"Prioritized player" = "Speler met voorrang";
+"Reopen the app to show the icon again." = "Open de app opnieuw om het symbool weer te tonen.";
+"Hide from menu bar" = "Verberg uit de menubalk";

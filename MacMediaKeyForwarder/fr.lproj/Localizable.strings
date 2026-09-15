@@ -5,7 +5,6 @@
 "Prioritize Spotify" = "Privilégier Spotify";
 "Pause" = "Pause";
 "Pause if no player is running" = "Mettre en pause si aucun lecteur n'est ouvert";
-"Donate if you like the app" = "Faire un don si vous aimez l'application";
 "Check for updates" = "Vérifier les mises à jour";
 "Quit" = "Quitter";
 "OK" = "OK";
@@ -15,3 +14,12 @@
 "Set Cider API Token…" = "Définir le jeton d'API Cider…";
 "Cider API Token" = "Jeton d'API Cider";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Collez le jeton généré dans Cider via Réglages > Connectivité > Gérer l'accès des applications externes à Cider. Laissez vide si l'accès externe ne requiert pas de jeton.";
+"Settings…" = "Réglages…";
+"Settings" = "Réglages";
+"General" = "Général";
+"Players" = "Lecteurs";
+"Media key forwarding" = "Transfert des touches multimédias";
+"On" = "Activé";
+"Paused" = "En pause";
+"Prioritized player" = "Lecteur prioritaire";
+"Reopen the app to show the icon again." = "Rouvrez l'app pour afficher à nouveau l'icône.";

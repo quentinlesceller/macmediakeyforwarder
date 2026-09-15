@@ -6,14 +6,17 @@
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
 //  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
-//  Cider and Spotifast over their local RPC channels, with a status-bar menu
-//  to control prioritization, pausing and launch-at-login.
+//  Cider and Spotifast over their local RPC channels. A status-bar menu
+//  offers the quick controls (pause, prioritized player) and a Settings
+//  window holds everything else.
 //
 
 import ApplicationServices
 import Cocoa
+import Combine
 import CoreServices
 import ScriptingBridge
+import SwiftUI
 
 // MARK: - State
 
@@ -79,17 +82,13 @@ private func tapEventCallback(proxy: CGEventTapProxy,
 @objc(AppDelegate)
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
-    // MARK: UserDefaults keys
-
-    private static let priorityOptionKey = "user_priority_option"
-    private static let pauseOptionKey = "user_pause_option"
-    private static let hideFromMenuBarOptionKey = "user_hide_from_menu_bar_option"
-
     // MARK: State
 
-    private var pauseState: PauseState = .none
+    private let settings = AppSettings.shared
+    private var subscriptions: Set<AnyCancellable> = []
     private var keyHoldStatus: KeyHoldState = .none
-    private var mediaKeysPriority: MediaKeysPrioritize = .none
+    private var pauseState: PauseState { settings.pauseState }
+    private var mediaKeysPriority: MediaKeysPrioritize { settings.priority }
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
 
@@ -100,9 +99,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var eventPortSource: CFRunLoopSource?
     private var accessibilityPollTimer: Timer?
     private var priorityOptionItems: [NSMenuItem] = []
-    private var pauseOptionItems: [NSMenuItem] = []
-    private var startupItem: NSMenuItem!
-    private var hideFromMenuBarItem: NSMenuItem!
+    private var pauseItem: NSMenuItem!
+    private var settingsWindow: NSWindow?
 
     // The bundle identifier for the local "iTunes" player (Music on 10.15+).
     private var iTunesBundleIdentifier: String {
@@ -283,18 +281,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Initial state.
-        pauseState = .none
         keyHoldStatus = .none
-        mediaKeysPriority = .none
-
-        let defaults = UserDefaults.standard
-        if let option = defaults.object(forKey: Self.priorityOptionKey) as? NSNumber {
-            mediaKeysPriority = MediaKeysPrioritize(rawValue: option.intValue) ?? .none
-        }
-        if let option = defaults.object(forKey: Self.pauseOptionKey) as? NSNumber {
-            pauseState = PauseState(rawValue: option.intValue) ?? .none
-        }
 
         // Version string.
         let info = Bundle.main.infoDictionary ?? [:]
@@ -302,16 +289,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let versionString = "Version \(shortVersion)"
 
         let menu = NSMenu()
-        menu.delegate = self
         menu.addItem(withTitle: versionString, action: nil, keyEquivalent: "")
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
-        pauseOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Pause", comment: "Pause"),
-                                             action: #selector(manualPause),
-                                             keyEquivalent: ""))
-        pauseOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Pause if no player is running", comment: "Pause if no player is running"),
-                                             action: #selector(autoPause),
-                                             keyEquivalent: ""))
+        pauseItem = menu.addItem(withTitle: NSLocalizedString("Pause", comment: "Pause"),
+                                 action: #selector(togglePause),
+                                 keyEquivalent: "")
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
@@ -330,25 +313,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotifast", comment: "Prioritize Spotifast"),
                                                 action: #selector(prioritizeSpotifast),
                                                 keyEquivalent: ""))
-        menu.addItem(withTitle: NSLocalizedString("Set Cider API Token…", comment: "Set Cider API Token…"),
-                     action: #selector(setCiderApiToken),
-                     keyEquivalent: "")
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
-        startupItem = menu.addItem(withTitle: NSLocalizedString("Open at login", comment: "Open at login"),
-                                   action: #selector(toggleStartupItem),
-                                   keyEquivalent: "")
-        hideFromMenuBarItem = menu.addItem(withTitle: NSLocalizedString("Hide from menu bar", comment: "Hide from menu bar"),
-                                           action: #selector(hideFromMenuBar),
-                                           keyEquivalent: "")
-        menu.addItem(NSMenuItem.separator()) // A thin grey line.
+        menu.addItem(withTitle: NSLocalizedString("Settings…", comment: "Settings…"),
+                     action: #selector(openSettings),
+                     keyEquivalent: ",")
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
-        menu.addItem(withTitle: NSLocalizedString("Donate if you like the app", comment: "Donate if you like the app"),
-                     action: #selector(support),
-                     keyEquivalent: "")
         menu.addItem(withTitle: NSLocalizedString("Check for updates", comment: "Check for updates"),
                      action: #selector(checkForUpdates),
                      keyEquivalent: "")
@@ -364,11 +337,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusItem.button?.image = image
         statusItem.menu = menu
         statusItem.behavior = .removalAllowed
-        statusItem.isVisible = !shouldHideFromMenuBar
 
-        updateStartupItemState()
-        updatePauseState()
-        updateOptionState()
+        observeSettings()
 
         if !startEventTap() {
             // Accessibility has not been granted yet. Ask for it the modern way
@@ -379,11 +349,50 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        if shouldHideFromMenuBar {
-            setHideFromMenuBar(false)
-            statusItem.isVisible = true
+        if settings.hideFromMenuBar {
+            settings.hideFromMenuBar = false
         }
         return true
+    }
+
+    // MARK: - Settings observation
+
+    /// Applies every preference as it changes, from the menu or the Settings
+    /// window alike. @Published emits before the property is written, so the
+    /// sinks are delivered on the next main-queue turn and read the new value.
+    private func observeSettings() {
+        settings.$pauseState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in self?.applyPauseState(state) }
+            .store(in: &subscriptions)
+
+        settings.$priority
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.updateOptionState() }
+            .store(in: &subscriptions)
+
+        settings.$hideFromMenuBar
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] hidden in self?.applyHideFromMenuBar(hidden) }
+            .store(in: &subscriptions)
+    }
+
+    private func applyPauseState(_ state: PauseState) {
+        if state == .pause {
+            stopEventSession()
+        } else {
+            startEventSession()
+        }
+        pauseItem.state = (state == .pause) ? .on : .off
+    }
+
+    private func applyHideFromMenuBar(_ hidden: Bool) {
+        // Hiding the icon leaves no way to reach the app unless it comes back at
+        // login, so turn that on as before.
+        if hidden && !LaunchAtLogin.isEnabled {
+            settings.launchAtLogin = true
+        }
+        statusItem.isVisible = !hidden
     }
 
     // MARK: - Event tap & permissions
@@ -451,148 +460,61 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         NSApp.terminate(nil)
     }
 
-    @objc private func support() {
-        if let url = URL(string: "https://paypal.me/milgra") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-
     @objc private func checkForUpdates() {
         if let url = URL(string: "https://github.com/quentinlesceller/macmediakeyforwarder/releases") {
             NSWorkspace.shared.open(url)
         }
     }
 
+    @objc private func togglePause() {
+        settings.pauseState = (settings.pauseState == .pause) ? .none : .pause
+    }
+
     // MARK: App prioritization
 
     @objc private func prioritizeNone() {
-        mediaKeysPriority = .none
-        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
-        updateOptionState()
+        settings.priority = .none
     }
 
     @objc private func prioritizeITunes() {
-        mediaKeysPriority = .iTunes
-        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
-        updateOptionState()
+        settings.priority = .iTunes
     }
 
     @objc private func prioritizeSpotify() {
-        mediaKeysPriority = .spotify
-        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
-        updateOptionState()
+        settings.priority = .spotify
     }
 
     @objc private func prioritizeCider() {
-        mediaKeysPriority = .cider
-        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
-        updateOptionState()
+        settings.priority = .cider
     }
 
     @objc private func prioritizeSpotifast() {
-        mediaKeysPriority = .spotifast
-        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
-        updateOptionState()
+        settings.priority = .spotifast
     }
 
-    // MARK: Cider API token
+    // MARK: Settings window
 
-    @objc private func setCiderApiToken() {
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Cider API Token", comment: "Cider API Token")
-        alert.informativeText = NSLocalizedString("Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.", comment: "Cider API token explanation")
-        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel"))
-
-        let tokenField = NSTextField(frame: NSRect(x: 0, y: 0, width: 280, height: 24))
-        tokenField.stringValue = ciderController.apiToken ?? ""
-        alert.accessoryView = tokenField
-        alert.window.initialFirstResponder = tokenField
-
-        // The app is a background (LSUIElement) app, so bring the dialog forward.
+    @objc private func openSettings() {
+        if settingsWindow == nil {
+            let controller = NSHostingController(rootView: SettingsView(settings: settings))
+            let window = NSWindow(contentViewController: controller)
+            window.title = NSLocalizedString("Settings", comment: "Settings")
+            window.styleMask = [.titled, .closable]
+            window.isReleasedWhenClosed = false
+            window.center()
+            settingsWindow = window
+        }
+        // The app is a background (LSUIElement) app, so bring the window forward.
         NSApp.activate(ignoringOtherApps: true)
-        if alert.runModal() == .alertFirstButtonReturn {
-            ciderController.apiToken = tokenField.stringValue
-        }
-    }
-
-    @objc private func manualPause() {
-        if pauseState != .pause {
-            pauseState = .pause
-            stopEventSession()
-        } else {
-            pauseState = .none
-            startEventSession()
-        }
-        UserDefaults.standard.set(pauseState.rawValue, forKey: Self.pauseOptionKey)
-        updatePauseState()
-    }
-
-    @objc private func autoPause() {
-        if pauseState != .automatic {
-            pauseState = .automatic
-        } else {
-            pauseState = .none
-        }
-        UserDefaults.standard.set(pauseState.rawValue, forKey: Self.pauseOptionKey)
-        updatePauseState()
-
-        startEventSession()
-    }
-
-    // MARK: Startup item
-
-    @objc private func toggleStartupItem() {
-        if LaunchAtLogin.isEnabled {
-            LaunchAtLogin.disable()
-        } else {
-            LaunchAtLogin.enable()
-        }
-        updateStartupItemState()
-    }
-
-    @objc private func hideFromMenuBar() {
-        setHideFromMenuBar(true)
-
-        if !LaunchAtLogin.isEnabled {
-            LaunchAtLogin.enable()
-        }
-
-        statusItem.isVisible = false
-    }
-
-    private func setHideFromMenuBar(_ hidden: Bool) {
-        UserDefaults.standard.set(hidden, forKey: Self.hideFromMenuBarOptionKey)
-    }
-
-    private var shouldHideFromMenuBar: Bool {
-        UserDefaults.standard.bool(forKey: Self.hideFromMenuBarOptionKey)
+        settingsWindow?.makeKeyAndOrderFront(nil)
     }
 
     // MARK: - UI refresh
 
     private func updateOptionState() {
-        // Re-read the persisted choice, defaulting to "None".
-        if let option = UserDefaults.standard.object(forKey: Self.priorityOptionKey) as? NSNumber {
-            mediaKeysPriority = MediaKeysPrioritize(rawValue: option.intValue) ?? .none
-        }
-
         // Tick the selected priority item.
         for (index, item) in priorityOptionItems.enumerated() {
             item.state = (index == mediaKeysPriority.rawValue) ? .on : .off
         }
-    }
-
-    private func updatePauseState() {
-        pauseOptionItems[0].state = (pauseState == .pause) ? .on : .off
-        pauseOptionItems[1].state = (pauseState == .automatic) ? .on : .off
-    }
-
-    private func updateStartupItemState() {
-        startupItem.state = LaunchAtLogin.isEnabled ? .on : .off
-    }
-
-    func menuWillOpen(_ menu: NSMenu) {
-        updateStartupItemState()
     }
 }

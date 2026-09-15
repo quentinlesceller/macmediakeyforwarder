@@ -12,7 +12,6 @@
 "Prioritize Spotify" = "Prioritize Spotify";
 "Pause" = "Pause";
 "Pause if no player is running" = "Pause if no player is running";
-"Donate if you like the app" = "Donate if you like the app";
 "Check for updates" = "Check for updates";
 "Quit" = "Quit";
 "OK" = "OK";
@@ -22,3 +21,13 @@
 "Set Cider API Token…" = "Set Cider API Token…";
 "Cider API Token" = "Cider API Token";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.";
+"Settings…" = "Settings…";
+"Settings" = "Settings";
+"General" = "General";
+"Players" = "Players";
+"Media key forwarding" = "Media key forwarding";
+"On" = "On";
+"Paused" = "Paused";
+"Prioritized player" = "Prioritized player";
+"Reopen the app to show the icon again." = "Reopen the app to show the icon again.";
+"Hide from menu bar" = "Hide from menu bar";
