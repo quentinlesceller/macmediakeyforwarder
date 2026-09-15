@@ -6,8 +6,8 @@
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
 //  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
-//  Cider over its local REST API, with a status-bar menu to control
-//  prioritization, pausing and launch-at-login.
+//  Cider and Spotifast over their local RPC channels, with a status-bar menu
+//  to control prioritization, pausing and launch-at-login.
 //
 
 import ApplicationServices
@@ -30,6 +30,8 @@ enum MediaKeysPrioritize: Int {
     case spotify = 2
     // If several apps are open, prioritize Cider.
     case cider = 3
+    // If several apps are open, prioritize Spotifast.
+    case spotifast = 4
 }
 
 enum PauseState: Int {
@@ -89,6 +91,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var keyHoldStatus: KeyHoldState = .none
     private var mediaKeysPriority: MediaKeysPrioritize = .none
     private let ciderController = CiderController()
+    private let spotifastController = SpotifastController()
 
     // MARK: UI / system
 
@@ -156,13 +159,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let musicRunning = musicApp?.isRunning ?? false
         let spotifyRunning = spotifyApp?.isRunning ?? false
         let ciderRunning = ciderController.isRunning
+        let spotifastRunning = spotifastController.isRunning
 
         if pauseState == .pause {
             return Unmanaged.passUnretained(event)
         }
 
         if pauseState == .automatic {
-            if !spotifyRunning && !musicRunning && !ciderRunning {
+            if !spotifyRunning && !musicRunning && !ciderRunning && !spotifastRunning {
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -213,20 +217,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 default:
                     break
                 }
+            case .spotifast:
+                switch keyCode {
+                case NX_KEYTYPE_PLAY:
+                    spotifastController.playPause()
+                case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                    spotifastController.nextTrack()
+                case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                    spotifastController.previousTrack()
+                default:
+                    break
+                }
             case .none:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
                     if spotifyRunning { spotify?.playpause?() }
                     if musicRunning { iTunes?.playpause?() }
                     if ciderRunning { ciderController.playPause() }
+                    if spotifastRunning { spotifastController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { iTunes?.nextTrack?() }
                     if ciderRunning { ciderController.nextTrack() }
+                    if spotifastRunning { spotifastController.nextTrack() }
                 case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
                     if spotifyRunning { spotify?.previousTrack?() }
                     if musicRunning { iTunes?.backTrack?() }
                     if ciderRunning { ciderController.previousTrack() }
+                    if spotifastRunning { spotifastController.previousTrack() }
                 default:
                     break
                 }
@@ -308,6 +326,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                                                 keyEquivalent: ""))
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Cider", comment: "Prioritize Cider"),
                                                 action: #selector(prioritizeCider),
+                                                keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotifast", comment: "Prioritize Spotifast"),
+                                                action: #selector(prioritizeSpotifast),
                                                 keyEquivalent: ""))
         menu.addItem(withTitle: NSLocalizedString("Set Cider API Token…", comment: "Set Cider API Token…"),
                      action: #selector(setCiderApiToken),
@@ -464,6 +485,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func prioritizeCider() {
         mediaKeysPriority = .cider
+        UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
+        updateOptionState()
+    }
+
+    @objc private func prioritizeSpotifast() {
+        mediaKeysPriority = .spotifast
         UserDefaults.standard.set(mediaKeysPriority.rawValue, forKey: Self.priorityOptionKey)
         updateOptionState()
     }

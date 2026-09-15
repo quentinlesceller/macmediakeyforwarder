@@ -10,4 +10,5 @@
 "OK" = "OK";
 "Cancel" = "キャンセル";
 "Prioritize Cider" = "Ciderを優先";
+"Prioritize Spotifast" = "Spotifastを優先";
 "Set Cider API Token…" = "Cider APIトークンを設定…";
