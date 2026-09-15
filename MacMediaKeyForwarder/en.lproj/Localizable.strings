@@ -22,3 +22,4 @@
 "Set Cider API Token…" = "Set Cider API Token…";
 "Cider API Token" = "Cider API Token";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.";
+"Launch player hidden" = "Launch player hidden";
