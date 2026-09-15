@@ -83,7 +83,7 @@ private struct PlayersSettingsView: View {
                 .labelsHidden()
             }
             Section {
-                TextField("Cider API Token", text: $settings.ciderApiToken)
+                SecureField("Cider API Token", text: $settings.ciderApiToken)
             } header: {
                 Text("Cider")
             } footer: {
