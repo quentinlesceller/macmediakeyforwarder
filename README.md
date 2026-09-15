@@ -19,6 +19,10 @@ Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cide
 
 Spotifast likewise ships no AppleScript dictionary. The running instance listens on a local loopback socket (`127.0.0.1:47113`) for its own `fastpotify` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast running.
 
+**Launch player hidden**
+
+When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** in the menu to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider and Spotifast are never launched by Mac Media Key Forwarder.
+
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
 If you want even more control over what you want to control you should try [beardedspice](http://beardedspice.github.io).

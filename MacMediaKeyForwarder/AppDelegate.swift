@@ -7,7 +7,7 @@
 //  Intercepts the system-defined media key events with a CGEventTap and
 //  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
 //  Cider and Spotifast over their local RPC channels, with a status-bar menu
-//  to control prioritization, pausing and launch-at-login.
+//  to control prioritization, pausing, hidden launch and launch-at-login.
 //
 
 import ApplicationServices
@@ -84,12 +84,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private static let priorityOptionKey = "user_priority_option"
     private static let pauseOptionKey = "user_pause_option"
     private static let hideFromMenuBarOptionKey = "user_hide_from_menu_bar_option"
+    private static let launchHiddenOptionKey = "user_launch_hidden_option"
 
     // MARK: State
 
     private var pauseState: PauseState = .none
     private var keyHoldStatus: KeyHoldState = .none
     private var mediaKeysPriority: MediaKeysPrioritize = .none
+    // Launch the prioritized player hidden instead of letting the Apple Event
+    // bring its window forward (#40).
+    private var launchPlayerHidden = false
+    // Bundle identifiers of players currently being launched hidden; presses
+    // that arrive while a launch is in flight are dropped rather than queued.
+    private var pendingHiddenLaunches: Set<String> = []
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
 
@@ -103,6 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var pauseOptionItems: [NSMenuItem] = []
     private var startupItem: NSMenuItem!
     private var hideFromMenuBarItem: NSMenuItem!
+    private var launchHiddenItem: NSMenuItem!
 
     // The bundle identifier for the local "iTunes" player (Music on 10.15+).
     private var iTunesBundleIdentifier: String {
@@ -175,6 +183,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let keyIsPressed = ((keyFlags & 0xFF00) >> 8) == 0xA
 
         if keyIsPressed {
+            // Sending an Apple Event to a player that is not running launches it
+            // with its window in front. When the user asked for a hidden launch,
+            // start the prioritized player ourselves instead and send the
+            // command once it is up.
+            if launchPlayerHidden {
+                if mediaKeysPriority == .spotify && !spotifyRunning {
+                    launchHidden(bundleIdentifier: "com.spotify.client") { [weak self] in
+                        self?.sendAfterHiddenLaunch(keyCode: keyCode, to: .spotify)
+                    }
+                    keyHoldStatus = .none
+                    return nil
+                }
+                if mediaKeysPriority == .iTunes && !musicRunning {
+                    launchHidden(bundleIdentifier: iTunesBundleIdentifier) { [weak self] in
+                        self?.sendAfterHiddenLaunch(keyCode: keyCode, to: .iTunes)
+                    }
+                    keyHoldStatus = .none
+                    return nil
+                }
+            }
+
             switch mediaKeysPriority {
             case .iTunes:
                 switch keyCode {
@@ -277,6 +306,99 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         return nil
     }
 
+    // MARK: - Hidden launch
+
+    /// Launches the player hidden and without activating it, then runs
+    /// `command` once the app reports it has finished launching. Spotify
+    /// sometimes un-hides itself shortly after launch, so the app is hidden
+    /// again as soon as it is ready and re-checked for a few seconds.
+    private func launchHidden(bundleIdentifier: String, then command: @escaping () -> Void) {
+        guard !pendingHiddenLaunches.contains(bundleIdentifier),
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+            return
+        }
+        pendingHiddenLaunches.insert(bundleIdentifier)
+
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.hides = true
+        configuration.activates = false
+
+        NSWorkspace.shared.openApplication(at: url, configuration: configuration) { [weak self] application, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                guard let application = application else {
+                    self.pendingHiddenLaunches.remove(bundleIdentifier)
+                    return
+                }
+                self.waitForLaunch(of: application, attemptsLeft: 100) {
+                    application.hide()
+                    self.pendingHiddenLaunches.remove(bundleIdentifier)
+                    command()
+                    self.keepHidden(application, checksLeft: 6)
+                }
+            }
+        }
+    }
+
+    /// Polls `isFinishedLaunching` every 100 ms (up to ~10 s) on the main queue.
+    private func waitForLaunch(of application: NSRunningApplication, attemptsLeft: Int, then ready: @escaping () -> Void) {
+        if application.isFinishedLaunching {
+            ready()
+            return
+        }
+        guard attemptsLeft > 0, !application.isTerminated else {
+            pendingHiddenLaunches.remove(application.bundleIdentifier ?? "")
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.waitForLaunch(of: application, attemptsLeft: attemptsLeft - 1, then: ready)
+        }
+    }
+
+    /// Re-hides the app if it shows itself during the seconds after launch.
+    private func keepHidden(_ application: NSRunningApplication, checksLeft: Int) {
+        guard checksLeft > 0, !application.isTerminated else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            if !application.isHidden {
+                application.hide()
+            }
+            self?.keepHidden(application, checksLeft: checksLeft - 1)
+        }
+    }
+
+    /// Forwards the media key that triggered a hidden launch to the freshly
+    /// launched player.
+    private func sendAfterHiddenLaunch(keyCode: Int, to player: MediaKeysPrioritize) {
+        switch player {
+        case .spotify:
+            let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: "com.spotify.client")
+            switch keyCode {
+            case NX_KEYTYPE_PLAY:
+                spotify?.playpause?()
+            case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                spotify?.nextTrack?()
+            case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                spotify?.previousTrack?()
+            default:
+                break
+            }
+        case .iTunes:
+            let iTunes: iTunesApplication? = SBApplication(bundleIdentifier: iTunesBundleIdentifier)
+            switch keyCode {
+            case NX_KEYTYPE_PLAY:
+                iTunes?.playpause?()
+            case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                iTunes?.nextTrack?()
+            case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                iTunes?.backTrack?()
+            default:
+                break
+            }
+        default:
+            break
+        }
+    }
+
     // MARK: - Application lifecycle
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -295,6 +417,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if let option = defaults.object(forKey: Self.pauseOptionKey) as? NSNumber {
             pauseState = PauseState(rawValue: option.intValue) ?? .none
         }
+        launchPlayerHidden = defaults.bool(forKey: Self.launchHiddenOptionKey)
 
         // Version string.
         let info = Bundle.main.infoDictionary ?? [:]
@@ -333,6 +456,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(withTitle: NSLocalizedString("Set Cider API Token…", comment: "Set Cider API Token…"),
                      action: #selector(setCiderApiToken),
                      keyEquivalent: "")
+        launchHiddenItem = menu.addItem(withTitle: NSLocalizedString("Launch player hidden", comment: "Launch player hidden"),
+                                        action: #selector(toggleLaunchHidden),
+                                        keyEquivalent: "")
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
@@ -369,6 +495,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateStartupItemState()
         updatePauseState()
         updateOptionState()
+        updateLaunchHiddenState()
 
         if !startEventTap() {
             // Accessibility has not been granted yet. Ask for it the modern way
@@ -495,6 +622,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateOptionState()
     }
 
+    // MARK: Hidden launch option
+
+    @objc private func toggleLaunchHidden() {
+        launchPlayerHidden.toggle()
+        UserDefaults.standard.set(launchPlayerHidden, forKey: Self.launchHiddenOptionKey)
+        updateLaunchHiddenState()
+    }
+
     // MARK: Cider API token
 
     @objc private func setCiderApiToken() {
@@ -590,6 +725,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     private func updateStartupItemState() {
         startupItem.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
+
+    private func updateLaunchHiddenState() {
+        launchHiddenItem.state = launchPlayerHidden ? .on : .off
     }
 
     func menuWillOpen(_ menu: NSMenu) {
