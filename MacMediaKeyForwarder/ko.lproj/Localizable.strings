@@ -28,3 +28,5 @@
 "Prioritized player" = "우선 플레이어";
 "Reopen the app to show the icon again." = "아이콘을 다시 표시하려면 앱을 다시 여세요.";
 "Hide from menu bar" = "메뉴 막대에서 숨기기";
+"Launch player hidden" = "플레이어를 숨김 상태로 실행";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "우선 순위로 지정한 Apple Music 또는 Spotify가 실행 중이 아닐 때, 미디어 키를 누르면 윈도우를 앞으로 가져오지 않고 숨김 상태로 실행합니다.";

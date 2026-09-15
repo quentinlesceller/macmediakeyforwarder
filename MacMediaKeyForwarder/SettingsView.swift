@@ -84,6 +84,11 @@ private struct PlayersSettingsView: View {
                 .labelsHidden()
             }
             Section {
+                Toggle("Launch player hidden", isOn: $settings.launchPlayerHidden)
+            } footer: {
+                Text("When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front.")
+            }
+            Section {
                 Toggle("Also send volume keys to Apple Music", isOn: $settings.forwardVolumeToMusic)
             } footer: {
                 Text("Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers.")
@@ -97,6 +102,6 @@ private struct PlayersSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 500)
+        .frame(height: 590)
     }
 }

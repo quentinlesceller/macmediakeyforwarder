@@ -29,3 +29,5 @@
 "Paused" = "Keskeytetty";
 "Prioritized player" = "Ensisijainen soitin";
 "Reopen the app to show the icon again." = "Avaa sovellus uudelleen näyttääksesi kuvakkeen.";
+"Launch player hidden" = "Käynnistä soitin piilotettuna";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Kun ensisijainen Apple Music tai Spotify ei ole käynnissä, medianäppäin käynnistää sen piilotettuna sen sijaan, että sen ikkuna tuotaisiin eteen.";

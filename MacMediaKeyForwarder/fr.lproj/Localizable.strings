@@ -24,3 +24,5 @@
 "Paused" = "En pause";
 "Prioritized player" = "Lecteur prioritaire";
 "Reopen the app to show the icon again." = "Rouvrez l'app pour afficher à nouveau l'icône.";
+"Launch player hidden" = "Lancer le lecteur masqué";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Lorsque Apple Music ou Spotify, le lecteur prioritaire, n'est pas ouvert, une touche multimédia le lance masqué au lieu d'afficher sa fenêtre au premier plan.";

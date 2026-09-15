@@ -27,3 +27,5 @@
 "Prioritized player" = "Elsőbbséget élvező lejátszó";
 "Reopen the app to show the icon again." = "Az ikon újbóli megjelenítéséhez nyisd meg újra az alkalmazást.";
 "Hide from menu bar" = "Elrejtés a menüsorból";
+"Launch player hidden" = "Lejátszó indítása rejtve";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Ha a fontosabbnak jelölt Apple Music vagy Spotify nem fut, a médiabillentyű rejtve indítja el, ahelyett hogy az ablakát előtérbe hozná.";

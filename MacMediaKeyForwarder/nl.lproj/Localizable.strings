@@ -30,3 +30,5 @@
 "Prioritized player" = "Speler met voorrang";
 "Reopen the app to show the icon again." = "Open de app opnieuw om het symbool weer te tonen.";
 "Hide from menu bar" = "Verberg uit de menubalk";
+"Launch player hidden" = "Speler verborgen starten";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Als het voorkeurs-Apple Music of -Spotify niet actief is, start een mediatoets het verborgen in plaats van het venster naar voren te halen.";

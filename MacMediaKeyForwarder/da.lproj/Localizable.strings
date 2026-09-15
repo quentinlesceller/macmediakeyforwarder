@@ -29,3 +29,5 @@
 "Prioritized player" = "Prioriteret afspiller";
 "Reopen the app to show the icon again." = "Åbn appen igen for at vise ikonet igen.";
 "Hide from menu bar" = "Skjul fra menulinjen";
+"Launch player hidden" = "Start afspiller skjult";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Når den prioriterede Apple Music eller Spotify ikke kører, starter en medietast den skjult i stedet for at vise dens vindue forrest.";

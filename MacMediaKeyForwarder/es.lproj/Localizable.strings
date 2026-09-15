@@ -28,3 +28,5 @@
 "Prioritized player" = "Reproductor prioritario";
 "Reopen the app to show the icon again." = "Vuelve a abrir la app para mostrar el icono de nuevo.";
 "Hide from menu bar" = "Ocultar de la barra de menús";
+"Launch player hidden" = "Abrir el reproductor oculto";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Si Apple Music o Spotify, el reproductor prioritario, no está abierto, una tecla multimedia lo abre oculto en lugar de traer su ventana al frente.";

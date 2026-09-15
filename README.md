@@ -29,6 +29,10 @@ Pear does not ship an AppleScript dictionary either, so it is controlled through
 - Keep its port at the default 26538.
 - On the first media key press Pear asks whether to allow "MacMediaKeyForwarder"; approve it. The access token is stored and reused afterwards.
 
+**Launch player hidden**
+
+When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast and Pear are never launched by Mac Media Key Forwarder.
+
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
 If you want even more control over what you want to control you should try [beardedspice](http://beardedspice.github.io).

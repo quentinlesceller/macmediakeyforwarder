@@ -22,3 +22,5 @@
 "Prioritized player" = "優先するプレーヤー";
 "Reopen the app to show the icon again." = "アイコンを再表示するにはアプリをもう一度開いてください。";
 "Hide from menu bar" = "メニューバーから隠す";
+"Launch player hidden" = "プレーヤーを非表示で起動";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "優先する Apple Music または Spotify が起動していないとき、メディアキーでウインドウを前面に出さずに非表示で起動します。";
