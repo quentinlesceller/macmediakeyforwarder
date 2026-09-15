@@ -11,6 +11,7 @@
 		D1B0000000000000000000A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A2 /* AppDelegate.swift */; };
 		D1B0000000000000000000A3 /* MediaApplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A3 /* MediaApplications.swift */; };
 		D1B0000000000000000000A5 /* CiderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A5 /* CiderController.swift */; };
+		D1B0000000000000000000A6 /* SpotifastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A6 /* SpotifastController.swift */; };
 		D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A4 /* LaunchAtLogin.swift */; };
 		336F74521E07E136009BCC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 336F74511E07E136009BCC1B /* Assets.xcassets */; };
 		336F74551E07E136009BCC1B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 336F74531E07E136009BCC1B /* MainMenu.xib */; };
@@ -40,6 +41,7 @@
 		D1A0000000000000000000A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000A3 /* MediaApplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaApplications.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000A5 /* CiderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CiderController.swift; sourceTree = "<group>"; };
+		D1A0000000000000000000A6 /* SpotifastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifastController.swift; sourceTree = "<group>"; };
 		336F74511E07E136009BCC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		336F74541E07E136009BCC1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		336F74561E07E136009BCC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				D1A0000000000000000000A2 /* AppDelegate.swift */,
 				D1A0000000000000000000A3 /* MediaApplications.swift */,
 				D1A0000000000000000000A5 /* CiderController.swift */,
+				D1A0000000000000000000A6 /* SpotifastController.swift */,
 				336F744E1E07E136009BCC1B /* Supporting Files */,
 			);
 			path = MacMediaKeyForwarder;
@@ -236,6 +239,7 @@
 				D1B0000000000000000000A2 /* AppDelegate.swift in Sources */,
 				D1B0000000000000000000A3 /* MediaApplications.swift in Sources */,
 				D1B0000000000000000000A5 /* CiderController.swift in Sources */,
+				D1B0000000000000000000A6 /* SpotifastController.swift in Sources */,
 				D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */,
 				D1B0000000000000000000A1 /* main.swift in Sources */,
 			);
