@@ -18,3 +18,13 @@
 "Prioritize Cider" = "Cider에 우선권 부여";
 "Prioritize Spotifast" = "Spotifast에 우선권 부여";
 "Set Cider API Token…" = "Cider API 토큰 설정…";
+"Settings…" = "설정…";
+"Settings" = "설정";
+"General" = "일반";
+"Players" = "플레이어";
+"Forwarding" = "전달";
+"On" = "켬";
+"Paused" = "일시 정지됨";
+"Prioritized player" = "우선 플레이어";
+"Reopen the app to show the icon again." = "아이콘을 다시 표시하려면 앱을 다시 여세요.";
+"Hide from menu bar" = "메뉴 막대에서 숨기기";

@@ -17,3 +17,13 @@
 "Quit" = "Kilépés";
 "Prioritize Cider" = "A Cider fontosabb";
 "Prioritize Spotifast" = "A Spotifast fontosabb";
+"Settings…" = "Beállítások…";
+"Settings" = "Beállítások";
+"General" = "Általános";
+"Players" = "Lejátszók";
+"Forwarding" = "Továbbítás";
+"On" = "Be";
+"Paused" = "Szüneteltetve";
+"Prioritized player" = "Elsőbbséget élvező lejátszó";
+"Reopen the app to show the icon again." = "Az ikon újbóli megjelenítéséhez nyisd meg újra az alkalmazást.";
+"Hide from menu bar" = "Elrejtés a menüsorból";

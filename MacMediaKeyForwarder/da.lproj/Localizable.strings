@@ -19,3 +19,13 @@
 "Prioritize Cider" = "Prioriter Cider";
 "Prioritize Spotifast" = "Prioriter Spotifast";
 "Set Cider API Token…" = "Angiv Cider API-token…";
+"Settings…" = "Indstillinger…";
+"Settings" = "Indstillinger";
+"General" = "Generelt";
+"Players" = "Afspillere";
+"Forwarding" = "Videresendelse";
+"On" = "Til";
+"Paused" = "Sat på pause";
+"Prioritized player" = "Prioriteret afspiller";
+"Reopen the app to show the icon again." = "Åbn appen igen for at vise ikonet igen.";
+"Hide from menu bar" = "Skjul fra menulinjen";

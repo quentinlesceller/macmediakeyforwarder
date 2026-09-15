@@ -17,3 +17,13 @@
 "Prioritize Cider" = "Предпочитать Cider";
 "Prioritize Spotifast" = "Предпочитать Spotifast";
 "Set Cider API Token…" = "Указать API-токен Cider…";
+"Settings…" = "Настройки…";
+"Settings" = "Настройки";
+"General" = "Основные";
+"Players" = "Плееры";
+"Forwarding" = "Пересылка";
+"On" = "Вкл.";
+"Paused" = "Приостановлено";
+"Prioritized player" = "Приоритетный плеер";
+"Reopen the app to show the icon again." = "Откройте приложение снова, чтобы вернуть значок.";
+"Hide from menu bar" = "Скрыть из строки меню";

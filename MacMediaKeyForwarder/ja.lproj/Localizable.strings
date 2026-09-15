@@ -12,3 +12,13 @@
 "Prioritize Cider" = "Ciderを優先";
 "Prioritize Spotifast" = "Spotifastを優先";
 "Set Cider API Token…" = "Cider APIトークンを設定…";
+"Settings…" = "設定…";
+"Settings" = "設定";
+"General" = "一般";
+"Players" = "プレーヤー";
+"Forwarding" = "転送";
+"On" = "オン";
+"Paused" = "一時停止中";
+"Prioritized player" = "優先するプレーヤー";
+"Reopen the app to show the icon again." = "アイコンを再表示するにはアプリをもう一度開いてください。";
+"Hide from menu bar" = "メニューバーから隠す";

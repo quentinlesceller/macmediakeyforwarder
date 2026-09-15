@@ -6,6 +6,8 @@ Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, S
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
+The status-bar menu holds the quick controls (pause and the prioritized player). Everything else — open at login, hiding the menu bar icon, automatic pause, and the Cider API token — lives in **Settings…** (⌘,).
+
 The app runs in the menu bar.
 
 **Cider support**

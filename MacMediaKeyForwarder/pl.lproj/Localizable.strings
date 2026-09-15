@@ -21,3 +21,13 @@
 "Prioritize Cider" = "Priorytetyzuj Cider";
 "Prioritize Spotifast" = "Priorytetyzuj Spotifast";
 "Set Cider API Token…" = "Ustaw token API Cider…";
+"Settings…" = "Ustawienia…";
+"Settings" = "Ustawienia";
+"General" = "Ogólne";
+"Players" = "Odtwarzacze";
+"Forwarding" = "Przekazywanie";
+"On" = "Włączone";
+"Paused" = "Wstrzymane";
+"Prioritized player" = "Odtwarzacz priorytetowy";
+"Reopen the app to show the icon again." = "Otwórz aplikację ponownie, aby znów wyświetlić ikonę.";
+"Hide from menu bar" = "Ukryj z paska menu";
