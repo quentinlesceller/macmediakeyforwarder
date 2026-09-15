@@ -322,9 +322,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
-        menu.addItem(withTitle: NSLocalizedString("Donate if you like the app", comment: "Donate if you like the app"),
-                     action: #selector(support),
-                     keyEquivalent: "")
         menu.addItem(withTitle: NSLocalizedString("Check for updates", comment: "Check for updates"),
                      action: #selector(checkForUpdates),
                      keyEquivalent: "")
@@ -461,12 +458,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func quit() {
         NSApp.terminate(nil)
-    }
-
-    @objc private func support() {
-        if let url = URL(string: "https://paypal.me/milgra") {
-            NSWorkspace.shared.open(url)
-        }
     }
 
     @objc private func checkForUpdates() {
