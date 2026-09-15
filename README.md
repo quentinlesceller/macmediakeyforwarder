@@ -15,7 +15,7 @@ The app runs in the menu bar.
 Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cider does not ship an AppleScript dictionary, so it is controlled through its local REST API instead (`http://localhost:10767`). For it to work:
 
 - In Cider, enable the RPC server under **Settings** > **Connectivity**.
-- If Cider requires a token for external applications (**Manage External Application Access to Cider**), copy it into Mac Media Key Forwarder via **Set Cider API Token…** in the menu.
+- If Cider requires a token for external applications (**Manage External Application Access to Cider**), paste it into Mac Media Key Forwarder under **Settings… > Players**.
 
 **Spotifast support**
 
@@ -82,6 +82,13 @@ The Automation permission is requested the first time you press a media key. All
 Thank you!!!
 
 ---
+
+*What's new in version 4.2.0 :*
+- Spotifast support: play/pause, next and previous now also work with [Spotifast](https://spotifast.rocks) (controlled through its local socket, no setup needed). New "Prioritize Spotifast" option. Thanks to @mdevils!
+- New Settings window (⌘,) for open at login, hiding the menu bar icon, automatic pause and the Cider API token. The menu keeps the quick controls: Pause and the prioritized player.
+- The Cider API token is entered in a masked field.
+- Removed the Donate menu item.
+- Fixed a media key press made while Spotifast was still starting up being replayed later.
 
 *What's new in version 4.1.0 :*
 - Cider support: play/pause, next and previous now also work with [Cider](https://cider.sh) (controlled through its local REST API — enable the RPC server in Cider under Settings > Connectivity, and use "Set Cider API Token…" in the menu if Cider requires a token).
