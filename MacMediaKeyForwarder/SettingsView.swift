@@ -51,8 +51,8 @@ private struct GeneralSettingsView: View {
             } footer: {
                 Text("Reopen the app to show the icon again.")
             }
-            Section("Forwarding") {
-                Picker("Forwarding", selection: $settings.pauseState) {
+            Section("Media key forwarding") {
+                Picker("Media key forwarding", selection: $settings.pauseState) {
                     Text("On").tag(PauseState.none)
                     Text("Paused").tag(PauseState.pause)
                     Text("Pause if no player is running").tag(PauseState.automatic)

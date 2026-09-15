@@ -22,7 +22,7 @@
 "Settings" = "Indstillinger";
 "General" = "Generelt";
 "Players" = "Afspillere";
-"Forwarding" = "Videresendelse";
+"Media key forwarding" = "Videresendelse af medietaster";
 "On" = "Til";
 "Paused" = "Sat på pause";
 "Prioritized player" = "Prioriteret afspiller";

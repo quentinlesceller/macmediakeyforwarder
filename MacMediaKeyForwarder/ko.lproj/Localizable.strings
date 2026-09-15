@@ -21,7 +21,7 @@
 "Settings" = "설정";
 "General" = "일반";
 "Players" = "플레이어";
-"Forwarding" = "전달";
+"Media key forwarding" = "미디어 키 전달";
 "On" = "켬";
 "Paused" = "일시 정지됨";
 "Prioritized player" = "우선 플레이어";

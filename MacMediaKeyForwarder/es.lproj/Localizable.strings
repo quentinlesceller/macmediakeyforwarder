@@ -21,7 +21,7 @@
 "Settings" = "Ajustes";
 "General" = "General";
 "Players" = "Reproductores";
-"Forwarding" = "Reenvío";
+"Media key forwarding" = "Reenvío de teclas multimedia";
 "On" = "Activado";
 "Paused" = "En pausa";
 "Prioritized player" = "Reproductor prioritario";

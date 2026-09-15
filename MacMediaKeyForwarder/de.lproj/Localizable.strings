@@ -21,7 +21,7 @@
 "Settings" = "Einstellungen";
 "General" = "Allgemein";
 "Players" = "Player";
-"Forwarding" = "Weiterleitung";
+"Media key forwarding" = "Weiterleitung der Medientasten";
 "On" = "Ein";
 "Paused" = "Pausiert";
 "Prioritized player" = "Bevorzugter Player";

@@ -15,7 +15,7 @@
 "Settings" = "設定";
 "General" = "一般";
 "Players" = "プレーヤー";
-"Forwarding" = "転送";
+"Media key forwarding" = "メディアキーの転送";
 "On" = "オン";
 "Paused" = "一時停止中";
 "Prioritized player" = "優先するプレーヤー";

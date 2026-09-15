@@ -23,7 +23,7 @@
 "Settings" = "Asetukset";
 "General" = "Yleiset";
 "Players" = "Soittimet";
-"Forwarding" = "Välitys";
+"Media key forwarding" = "Medianäppäinten välitys";
 "On" = "Päällä";
 "Paused" = "Keskeytetty";
 "Prioritized player" = "Ensisijainen soitin";

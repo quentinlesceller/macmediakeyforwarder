@@ -20,7 +20,7 @@
 "Settings" = "Настройки";
 "General" = "Основные";
 "Players" = "Плееры";
-"Forwarding" = "Пересылка";
+"Media key forwarding" = "Пересылка мультимедийных клавиш";
 "On" = "Вкл.";
 "Paused" = "Приостановлено";
 "Prioritized player" = "Приоритетный плеер";

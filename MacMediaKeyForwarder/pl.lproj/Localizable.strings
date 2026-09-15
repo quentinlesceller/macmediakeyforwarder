@@ -24,7 +24,7 @@
 "Settings" = "Ustawienia";
 "General" = "Ogólne";
 "Players" = "Odtwarzacze";
-"Forwarding" = "Przekazywanie";
+"Media key forwarding" = "Przekazywanie klawiszy multimedialnych";
 "On" = "Włączone";
 "Paused" = "Wstrzymane";
 "Prioritized player" = "Odtwarzacz priorytetowy";

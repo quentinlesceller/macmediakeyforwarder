@@ -18,7 +18,7 @@
 "Settings" = "Réglages";
 "General" = "Général";
 "Players" = "Lecteurs";
-"Forwarding" = "Transfert";
+"Media key forwarding" = "Transfert des touches multimédias";
 "On" = "Activé";
 "Paused" = "En pause";
 "Prioritized player" = "Lecteur prioritaire";

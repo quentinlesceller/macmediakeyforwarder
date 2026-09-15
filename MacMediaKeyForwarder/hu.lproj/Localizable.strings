@@ -20,7 +20,7 @@
 "Settings" = "Beállítások";
 "General" = "Általános";
 "Players" = "Lejátszók";
-"Forwarding" = "Továbbítás";
+"Media key forwarding" = "Médiabillentyűk továbbítása";
 "On" = "Be";
 "Paused" = "Szüneteltetve";
 "Prioritized player" = "Elsőbbséget élvező lejátszó";
