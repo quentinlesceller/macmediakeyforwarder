@@ -66,6 +66,11 @@ final class SpotifastController {
                 connection.send(content: data, completion: .contentProcessed { _ in
                     connection.cancel()
                 })
+            case .waiting:
+                // Nothing is listening (Spotifast is still starting up, or the
+                // port is gone). NWConnection would otherwise sit here retrying
+                // and replay this stale command once the port appears.
+                connection.cancel()
             case .failed, .cancelled:
                 self?.queue.async { self?.connections.removeValue(forKey: id) }
             default:
