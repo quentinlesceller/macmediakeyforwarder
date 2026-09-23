@@ -78,6 +78,7 @@ private struct PlayersSettingsView: View {
                     Text("Prioritize Spotify").tag(MediaKeysPrioritize.spotify)
                     Text("Prioritize Cider").tag(MediaKeysPrioritize.cider)
                     Text("Prioritize Spotifast").tag(MediaKeysPrioritize.spotifast)
+                    Text("Prioritize Pear").tag(MediaKeysPrioritize.pear)
                 }
                 .pickerStyle(.radioGroup)
                 .labelsHidden()
@@ -91,6 +92,6 @@ private struct PlayersSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 380)
+        .frame(height: 404)
     }
 }
