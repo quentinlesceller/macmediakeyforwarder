@@ -1,8 +1,8 @@
 # Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks) and [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks), [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music), [TIDAL](https://tidal.com) and [Deezer](https://www.deezer.com).
 
-Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast or Pear (YouTube Music) directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast, Pear (YouTube Music), TIDAL or Deezer directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
@@ -28,6 +28,10 @@ Pear does not ship an AppleScript dictionary either, so it is controlled through
 - In Pear, enable the **API Server** plugin under **Plugins**.
 - Keep its port at the default 26538.
 - On the first media key press Pear asks whether to allow "MacMediaKeyForwarder"; approve it. The access token is stored and reused afterwards.
+
+**TIDAL and Deezer support**
+
+TIDAL and Deezer ship neither an AppleScript dictionary nor a local control API. They do list play/pause, next and previous in their menu bar (TIDAL under **Playback**, Deezer under **Controls**), so Mac Media Key Forwarder presses those menu items through the Accessibility permission it already has. No setup is required, and the player can stay in the background. The menu items are recognized by their English titles, so this only works while the player's menus are in English.
 
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
