@@ -5,7 +5,7 @@
 //  Swift port of the original Objective-C AppDelegate by Milan Toth.
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
-//  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
+//  forwards them to Music and/or Spotify over Scripting Bridge and to
 //  Cider, Spotifast and Pear over their local RPC channels. A status-bar menu
 //  offers the quick controls (pause, prioritized player) and a Settings
 //  window holds everything else.
@@ -27,8 +27,8 @@ import SwiftUI
 enum MediaKeysPrioritize: Int {
     // Normal behavior (no priority; send events to every player that is open).
     case none = 0
-    // If several apps are open, prioritize iTunes.
-    case iTunes = 1
+    // If several apps are open, prioritize Music.
+    case music = 1
     // If several apps are open, prioritize Spotify.
     case spotify = 2
     // If several apps are open, prioritize Cider.
@@ -105,14 +105,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var pauseItem: NSMenuItem!
     private var settingsWindow: NSWindow?
 
-    // The bundle identifier for the local "iTunes" player (Music on 10.15+).
-    private var iTunesBundleIdentifier: String {
-        if #available(macOS 10.15, *) {
-            return "com.apple.music"
-        } else {
-            return "com.apple.iTunes"
-        }
-    }
+    // The bundle identifier of Apple's Music app.
+    private let musicBundleIdentifier = "com.apple.music"
 
     // MARK: - Event handling
 
@@ -150,11 +144,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return Unmanaged.passUnretained(event)
         }
 
-        let musicApp = SBApplication(bundleIdentifier: iTunesBundleIdentifier)
+        let musicApp = SBApplication(bundleIdentifier: musicBundleIdentifier)
         let spotifyApp = SBApplication(bundleIdentifier: "com.spotify.client")
         // SBApplication is declared to conform to both protocols, so these are
         // plain upcasts that forward the transport commands at runtime.
-        let iTunes: iTunesApplication? = musicApp
+        let music: MusicApplication? = musicApp
         let spotify: SpotifyApplication? = spotifyApp
 
         let musicRunning = musicApp?.isRunning ?? false
@@ -178,10 +172,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         if keyIsPressed {
             switch mediaKeysPriority {
-            case .iTunes:
+            case .music:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
-                    iTunes?.playpause?()
+                    music?.playpause?()
                 default:
                     if keyHoldStatus == .none {
                         keyHoldStatus = .waiting
@@ -189,9 +183,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                         keyHoldStatus = .holding
                         switch keyCode {
                         case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
-                            iTunes?.fastForward?()
+                            music?.fastForward?()
                         case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
-                            iTunes?.rewind?()
+                            music?.rewind?()
                         default:
                             break
                         }
@@ -245,19 +239,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
                     if spotifyRunning { spotify?.playpause?() }
-                    if musicRunning { iTunes?.playpause?() }
+                    if musicRunning { music?.playpause?() }
                     if ciderRunning { ciderController.playPause() }
                     if spotifastRunning { spotifastController.playPause() }
                     if pearRunning { pearController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
-                    if musicRunning { iTunes?.nextTrack?() }
+                    if musicRunning { music?.nextTrack?() }
                     if ciderRunning { ciderController.nextTrack() }
                     if spotifastRunning { spotifastController.nextTrack() }
                     if pearRunning { pearController.nextTrack() }
                 case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
                     if spotifyRunning { spotify?.previousTrack?() }
-                    if musicRunning { iTunes?.backTrack?() }
+                    if musicRunning { music?.backTrack?() }
                     if ciderRunning { ciderController.previousTrack() }
                     if spotifastRunning { spotifastController.previousTrack() }
                     if pearRunning { pearController.previousTrack() }
@@ -268,20 +262,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         } else {
             switch keyHoldStatus {
             case .waiting:
-                if mediaKeysPriority == .iTunes {
+                if mediaKeysPriority == .music {
                     switch keyCode {
                     case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
-                        iTunes?.nextTrack?()
+                        music?.nextTrack?()
                     case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
-                        iTunes?.backTrack?()
+                        music?.backTrack?()
                     default:
                         break
                     }
                 }
             case .holding:
                 // Stop fast forwarding / rewinding.
-                if mediaKeysPriority == .iTunes {
-                    iTunes?.resume?()
+                if mediaKeysPriority == .music {
+                    music?.resume?()
                 }
             case .none:
                 break
@@ -319,8 +313,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Send events to all players", comment: "Send events to all players"),
                                                 action: #selector(prioritizeNone),
                                                 keyEquivalent: ""))
-        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize iTunes", comment: "Prioritize iTunes"),
-                                                action: #selector(prioritizeITunes),
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Apple Music", comment: "Prioritize Apple Music"),
+                                                action: #selector(prioritizeMusic),
                                                 keyEquivalent: ""))
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotify", comment: "Prioritize Spotify"),
                                                 action: #selector(prioritizeSpotify),
@@ -497,8 +491,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         settings.priority = .none
     }
 
-    @objc private func prioritizeITunes() {
-        settings.priority = .iTunes
+    @objc private func prioritizeMusic() {
+        settings.priority = .music
     }
 
     @objc private func prioritizeSpotify() {

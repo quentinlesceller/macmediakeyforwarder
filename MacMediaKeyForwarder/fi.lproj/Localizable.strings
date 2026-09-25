@@ -9,7 +9,7 @@
 "Send events to all players" = "Ohjaa kaikkia soittimia";
 "Open at login" = "Avaa sisäänkirjautuessa";
 "Hide from menu bar" = "Piilota valikkoriviltä";
-"Prioritize iTunes" = "iTunes etusijalla";
+"Prioritize Apple Music" = "Apple Music etusijalla";
 "Prioritize Spotify" = "Spotify etusijalla";
 "Pause" = "Tauko";
 "Pause if no player is running" = "Tauko soittimien ollessa kiinni";

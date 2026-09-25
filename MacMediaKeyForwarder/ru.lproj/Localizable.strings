@@ -7,7 +7,7 @@
 */
 
 "Send events to all players" = "Отправлять события на все плееры";
-"Prioritize iTunes" = "Предпочитать iTunes";
+"Prioritize Apple Music" = "Предпочитать Apple Music";
 "Prioritize Spotify" = "Предпочитать Spotify";
 "Pause" = "Пауза";
 "Pause if no player is running" = "Пауза, если ни один плеер не запущен";

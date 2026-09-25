@@ -8,7 +8,7 @@
 
 "Send events to all players" = "Enviar eventos a todos los reproductores";
 "Open at login" = "Abrir al iniciar sesión";
-"Prioritize iTunes" = "Dar prioridad a iTunes";
+"Prioritize Apple Music" = "Dar prioridad a Apple Music";
 "Prioritize Spotify" = "Dar prioridad a Spotify";
 "Pause" = "Pausar";
 "Pause if no player is running" = "Pausar si ningún reproductor se está ejecutando";

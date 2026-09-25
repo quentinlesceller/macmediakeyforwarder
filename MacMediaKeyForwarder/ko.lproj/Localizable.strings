@@ -8,10 +8,10 @@
 
 "Send events to all players" = "모든 플레이어에 이벤트 보내기";
 "Open at login" = "부팅시 자동 실행";
-"Prioritize iTunes" = "iTunes에 우선권 부여";
+"Prioritize Apple Music" = "Apple Music에 우선권 부여";
 "Prioritize Spotify" = "Spotify에 우선권 부여";
 "Pause" = "일시정지 (macOS 기본값 사용)";
-"Pause if no player is running" = "iTunes 또는 Spotify가 열려있지 않으면 일시정지";
+"Pause if no player is running" = "실행 중인 플레이어가 없으면 일시정지";
 "Check for updates" = "업데이트 확인";
 "Quit" = "종료";
 "Prioritize Cider" = "Cider에 우선권 부여";

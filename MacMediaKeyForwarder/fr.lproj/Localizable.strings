@@ -1,7 +1,7 @@
 "Send events to all players" = "Envoyer les événements à tous les lecteurs";
 "Open at login" = "Lancer au démarrage";
 "Hide from menu bar" = "Masquer l'icône dans la barre";
-"Prioritize iTunes" = "Privilégier iTunes";
+"Prioritize Apple Music" = "Privilégier Apple Music";
 "Prioritize Spotify" = "Privilégier Spotify";
 "Pause" = "Pause";
 "Pause if no player is running" = "Mettre en pause si aucun lecteur n'est ouvert";

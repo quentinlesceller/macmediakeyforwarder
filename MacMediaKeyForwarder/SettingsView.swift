@@ -74,7 +74,7 @@ private struct PlayersSettingsView: View {
             Section("Prioritized player") {
                 Picker("Prioritized player", selection: $settings.priority) {
                     Text("Send events to all players").tag(MediaKeysPrioritize.none)
-                    Text("Prioritize iTunes").tag(MediaKeysPrioritize.iTunes)
+                    Text("Prioritize Apple Music").tag(MediaKeysPrioritize.music)
                     Text("Prioritize Spotify").tag(MediaKeysPrioritize.spotify)
                     Text("Prioritize Cider").tag(MediaKeysPrioritize.cider)
                     Text("Prioritize Spotifast").tag(MediaKeysPrioritize.spotifast)

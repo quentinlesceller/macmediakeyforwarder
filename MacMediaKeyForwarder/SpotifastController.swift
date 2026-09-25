@@ -5,7 +5,7 @@
 //  Controls the Spotifast Spotify client (https://spotifast.rocks) through its
 //  local remote-control socket. Spotifast is a Rust/egui app and ships no
 //  AppleScript scripting dictionary, so it cannot be driven over Scripting
-//  Bridge like iTunes/Music and Spotify; instead the running instance listens
+//  Bridge like Music and Spotify; instead the running instance listens
 //  on an exclusive loopback TCP socket (127.0.0.1:47113) that also serves as
 //  its single-instance guard.
 //

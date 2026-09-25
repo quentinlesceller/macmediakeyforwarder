@@ -1,6 +1,6 @@
 "Send events to all players" = "すべてのプレーヤーを操作";
 "Open at login" = "ログイン時に起動";
-"Prioritize iTunes" = "iTunesを優先";
+"Prioritize Apple Music" = "Apple Musicを優先";
 "Prioritize Spotify" = "Spotifyを優先";
 "Pause" = "一時動作停止";
 "Pause if no player is running" = "プレーヤー未起動時に動作停止";
