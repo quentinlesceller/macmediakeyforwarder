@@ -14,6 +14,7 @@
 import ApplicationServices
 import Cocoa
 import Combine
+import CoreAudio
 import CoreServices
 import ScriptingBridge
 import SwiftUI
@@ -56,6 +57,9 @@ enum KeyHoldState: Int {
 // MARK: - Media key constants
 
 // Media key codes from <IOKit/hidsystem/ev_keymap.h>.
+private let NX_KEYTYPE_SOUND_UP = 0
+private let NX_KEYTYPE_SOUND_DOWN = 1
+private let NX_KEYTYPE_MUTE = 7
 private let NX_KEYTYPE_PLAY = 16
 private let NX_KEYTYPE_NEXT = 17
 private let NX_KEYTYPE_PREVIOUS = 18
@@ -94,6 +98,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
     private let pearController = PearController()
+    private let volumeQueue = DispatchQueue(label: "MacMediaKeyForwarder.volume")
+    // Music's volume before the mute key set it to 0; accessed on volumeQueue.
+    private var mutedMusicVolume: Int?
 
     // MARK: UI / system
 
@@ -135,6 +142,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
 
         let keyCode = Int((nsEvent.data1 & 0xFFFF0000) >> 16)
+
+        if keyCode == NX_KEYTYPE_SOUND_UP || keyCode == NX_KEYTYPE_SOUND_DOWN || keyCode == NX_KEYTYPE_MUTE {
+            forwardVolumeKey(keyCode, nsEvent: nsEvent)
+            // Always let the event through so the system volume changes too.
+            return Unmanaged.passUnretained(event)
+        }
 
         if keyCode != NX_KEYTYPE_PLAY &&
             keyCode != NX_KEYTYPE_FAST &&
@@ -285,6 +298,89 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         // Stop propagation.
         return nil
+    }
+
+    // MARK: - Volume keys
+
+    /// Mirrors the volume and mute keys onto Music's own volume when enabled.
+    /// The Apple Events run off the tap thread so a slow reply from Music
+    /// cannot stall the tap and delay the system volume change.
+    private func forwardVolumeKey(_ keyCode: Int, nsEvent: NSEvent) {
+        guard settings.forwardVolumeToMusic, pauseState != .pause else { return }
+        guard mediaKeysPriority == .none || mediaKeysPriority == .music else { return }
+
+        let keyFlags = nsEvent.data1 & 0x0000FFFF
+        let keyIsPressed = ((keyFlags & 0xFF00) >> 8) == 0xA
+        let keyIsRepeat = (keyFlags & 0x1) != 0
+        guard keyIsPressed else { return }
+
+        let bundleIdentifier = musicBundleIdentifier
+        let update: (MusicApplication) -> Void
+
+        if keyCode == NX_KEYTYPE_MUTE {
+            // Holding mute does not toggle the system repeatedly.
+            guard !keyIsRepeat, let systemMuted = systemOutputMuted() else { return }
+            // Music rejects scripted changes to its own mute (error 9038), so
+            // mute by dropping its volume to 0 and restoring it afterwards.
+            // The system has not seen the key yet, so it is about to flip to
+            // the opposite state; following that state rather than toggling
+            // keeps Music in step with the system.
+            update = { [weak self] music in
+                guard let self = self else { return }
+                if systemMuted {
+                    self.restoreMutedMusicVolume(music)
+                } else if self.mutedMusicVolume == nil,
+                          let current = music.soundVolume, current > 0 {
+                    self.mutedMusicVolume = current
+                    music.setSoundVolume?(0)
+                }
+            }
+        } else {
+            // Match the system steps: 1/16 of the range, or 1/64 with Shift-Option.
+            let fineStep = nsEvent.modifierFlags.contains([.shift, .option])
+            let step = fineStep ? 2 : 6
+            let delta = keyCode == NX_KEYTYPE_SOUND_UP ? step : -step
+            update = { [weak self] music in
+                // The volume keys unmute the system, so unmute Music as well
+                // and step from the volume it had before muting.
+                self?.restoreMutedMusicVolume(music)
+                guard let current = music.soundVolume else { return }
+                music.setSoundVolume?(min(100, max(0, current + delta)))
+            }
+        }
+
+        volumeQueue.async {
+            // Check isRunning first: any other Apple Event would launch Music.
+            guard let musicApp = SBApplication(bundleIdentifier: bundleIdentifier),
+                  musicApp.isRunning else { return }
+            update(musicApp)
+        }
+    }
+
+    /// Puts back the volume Music had before the mute key zeroed it.
+    /// Only called on volumeQueue, which also guards mutedMusicVolume.
+    private func restoreMutedMusicVolume(_ music: MusicApplication) {
+        guard let volume = mutedMusicVolume else { return }
+        mutedMusicVolume = nil
+        music.setSoundVolume?(volume)
+    }
+
+    /// The mute state of the default output device, or nil if it has none.
+    private func systemOutputMuted() -> Bool? {
+        var deviceID = AudioObjectID(kAudioObjectUnknown)
+        var size = UInt32(MemoryLayout<AudioObjectID>.size)
+        var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+                                                 mScope: kAudioObjectPropertyScopeGlobal,
+                                                 mElement: kAudioObjectPropertyElementMain)
+        guard AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address,
+                                         0, nil, &size, &deviceID) == noErr else { return nil }
+
+        var muted: UInt32 = 0
+        size = UInt32(MemoryLayout<UInt32>.size)
+        address.mSelector = kAudioDevicePropertyMute
+        address.mScope = kAudioDevicePropertyScopeOutput
+        guard AudioObjectGetPropertyData(deviceID, &address, 0, nil, &size, &muted) == noErr else { return nil }
+        return muted != 0
     }
 
     // MARK: - Application lifecycle

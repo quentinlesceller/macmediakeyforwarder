@@ -33,3 +33,16 @@ Auto-Pause state :
         - macOS default media key behaviour should happen
     - open Music or Spotify
         - app should behave based on the selected priority option
+
+Volume keys to Apple Music :
+    - check that "Also send volume keys to Apple Music" is off by default
+        - volume keys should only change the system volume
+    - turn it on in Settings > Players, play a song in Apple Music
+        - volume up/down should change Apple Music's volume by 6 as well as the system volume
+        - Shift-Option-volume up/down should change it by 2
+        - mute should set Apple Music's volume to 0, mute again should restore it
+        - volume up while muted should restore Apple Music's volume and step it
+    - quit Apple Music
+        - volume keys shouldn't start Apple Music
+    - select Prioritize Spotify
+        - Apple Music's volume shouldn't change

@@ -21,6 +21,9 @@ import ScriptingBridge
     @objc optional func fastForward()
     @objc optional func rewind()
     @objc optional func resume()
+    // Music's own output volume (0-100), independent of the system volume.
+    @objc optional var soundVolume: Int { get }
+    @objc optional func setSoundVolume(_ soundVolume: Int)
 }
 
 // The Spotify transport commands used by the forwarder.

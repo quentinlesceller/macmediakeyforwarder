@@ -20,6 +20,7 @@ final class AppSettings: ObservableObject {
     private static let priorityKey = "user_priority_option"
     private static let pauseKey = "user_pause_option"
     private static let hideFromMenuBarKey = "user_hide_from_menu_bar_option"
+    private static let forwardVolumeToMusicKey = "user_forward_volume_to_music_option"
 
     private let defaults = UserDefaults.standard
 
@@ -37,6 +38,12 @@ final class AppSettings: ObservableObject {
     /// reopened from the Finder or Launchpad.
     @Published var hideFromMenuBar: Bool {
         didSet { defaults.set(hideFromMenuBar, forKey: Self.hideFromMenuBarKey) }
+    }
+
+    /// Also steps Music's own volume when the volume keys are pressed, so
+    /// AirPlay speakers follow. The system volume still changes as usual.
+    @Published var forwardVolumeToMusic: Bool {
+        didSet { defaults.set(forwardVolumeToMusic, forKey: Self.forwardVolumeToMusicKey) }
     }
 
     /// Token for Cider's external application access. Stored trimmed; an empty
@@ -78,6 +85,7 @@ final class AppSettings: ObservableObject {
         let pauseValue = (defaults.object(forKey: Self.pauseKey) as? NSNumber)?.intValue ?? 0
         pauseState = PauseState(rawValue: pauseValue) ?? .none
         hideFromMenuBar = defaults.bool(forKey: Self.hideFromMenuBarKey)
+        forwardVolumeToMusic = defaults.bool(forKey: Self.forwardVolumeToMusicKey)
         ciderApiToken = defaults.string(forKey: CiderController.apiTokenKey) ?? ""
     }
 }
