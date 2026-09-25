@@ -84,6 +84,11 @@ private struct PlayersSettingsView: View {
                 .labelsHidden()
             }
             Section {
+                Toggle("Also send volume keys to Apple Music", isOn: $settings.forwardVolumeToMusic)
+            } footer: {
+                Text("Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers.")
+            }
+            Section {
                 SecureField("Cider API Token", text: $settings.ciderApiToken)
             } header: {
                 Text("Cider")
@@ -92,6 +97,6 @@ private struct PlayersSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 404)
+        .frame(height: 500)
     }
 }

@@ -32,3 +32,5 @@
 "Prioritized player" = "Prioritized player";
 "Reopen the app to show the icon again." = "Reopen the app to show the icon again.";
 "Hide from menu bar" = "Hide from menu bar";
+"Also send volume keys to Apple Music" = "Also send volume keys to Apple Music";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers.";
