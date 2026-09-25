@@ -91,6 +91,9 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.3.0 :*
+- Pear Desktop (YouTube Music) support: play/pause, next and previous now also work with [Pear](https://github.com/pear-devs/pear-desktop) (controlled through the local HTTP API of its API Server plugin; enable that plugin in Pear and approve the access request on the first key press). New "Prioritize Pear (YouTube Music)" option. Thanks to @stefanceriu!
+
 *What's new in version 4.2.0 :*
 - Spotifast support: play/pause, next and previous now also work with [Spotifast](https://spotifast.rocks) (controlled through its local socket, no setup needed). New "Prioritize Spotifast" option. Thanks to @mdevils!
 - New Settings window (⌘,) for open at login, hiding the menu bar icon, automatic pause and the Cider API token. The menu keeps the quick controls: Pause and the prioritized player.
