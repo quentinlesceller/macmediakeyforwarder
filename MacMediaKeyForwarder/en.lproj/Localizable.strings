@@ -18,6 +18,7 @@
 "Cancel" = "Cancel";
 "Prioritize Cider" = "Prioritize Cider";
 "Prioritize Spotifast" = "Prioritize Spotifast";
+"Prioritize Pear (YouTube Music)" = "Prioritize Pear (YouTube Music)";
 "Set Cider API Token…" = "Set Cider API Token…";
 "Cider API Token" = "Cider API Token";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token.";
@@ -31,4 +32,3 @@
 "Prioritized player" = "Prioritized player";
 "Reopen the app to show the icon again." = "Reopen the app to show the icon again.";
 "Hide from menu bar" = "Hide from menu bar";
-"Prioritize Pear" = "Prioritize Pear";

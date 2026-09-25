@@ -331,7 +331,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotifast", comment: "Prioritize Spotifast"),
                                                 action: #selector(prioritizeSpotifast),
                                                 keyEquivalent: ""))
-        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Pear", comment: "Prioritize Pear"),
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Pear (YouTube Music)", comment: "Prioritize Pear (YouTube Music)"),
                                                 action: #selector(prioritizePear),
                                                 keyEquivalent: ""))
 

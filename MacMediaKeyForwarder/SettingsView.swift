@@ -78,7 +78,7 @@ private struct PlayersSettingsView: View {
                     Text("Prioritize Spotify").tag(MediaKeysPrioritize.spotify)
                     Text("Prioritize Cider").tag(MediaKeysPrioritize.cider)
                     Text("Prioritize Spotifast").tag(MediaKeysPrioritize.spotifast)
-                    Text("Prioritize Pear").tag(MediaKeysPrioritize.pear)
+                    Text("Prioritize Pear (YouTube Music)").tag(MediaKeysPrioritize.pear)
                 }
                 .pickerStyle(.radioGroup)
                 .labelsHidden()

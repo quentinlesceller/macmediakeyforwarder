@@ -24,6 +24,12 @@ final class PearController {
     private static let baseURL = "http://127.0.0.1:26538"
 
     private let session: URLSession
+    private let authSession: URLSession
+
+    // Set while the handshake runs so repeated key presses don't stack up
+    // approval dialogs in Pear. Only touched on the main queue: key presses
+    // arrive there and authSession delivers its completion there.
+    private var isAuthenticating = false
 
     init() {
         // Keep timeouts short: the target is loopback, so anything slower than
@@ -32,6 +38,14 @@ final class PearController {
         configuration.timeoutIntervalForRequest = 2
         configuration.timeoutIntervalForResource = 2
         session = URLSession(configuration: configuration)
+
+        // The handshake stays open while Pear shows its approval dialog, so it
+        // needs its own session: timeoutIntervalForResource caps every task on
+        // a session regardless of the per-request timeout.
+        let authConfiguration = URLSessionConfiguration.ephemeral
+        authConfiguration.timeoutIntervalForRequest = 60
+        authConfiguration.timeoutIntervalForResource = 60
+        authSession = URLSession(configuration: authConfiguration, delegate: nil, delegateQueue: .main)
     }
 
     // Pear ships under the bundle identifier it inherited from its upstream
@@ -58,7 +72,12 @@ final class PearController {
     // no meaningful recovery if Pear is unreachable.
     private func post(_ command: String) {
         guard let token = accessToken else {
+            // Presses made while the dialog is up are dropped; the one that
+            // started the handshake is sent once it succeeds.
+            guard !isAuthenticating else { return }
+            isAuthenticating = true
             requestAccessToken { [weak self] token in
+                self?.isAuthenticating = false
                 guard token != nil else { return }
                 self?.post(command)
             }
@@ -85,10 +104,7 @@ final class PearController {
         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        // The dialog Pear shows waits for the user, so this one request needs
-        // more than the loopback timeout used everywhere else.
-        request.timeoutInterval = 60
-        session.dataTask(with: request) { [weak self] data, _, _ in
+        authSession.dataTask(with: request) { [weak self] data, _, _ in
             guard let data = data,
                   let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let token = payload["accessToken"] as? String else {
