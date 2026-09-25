@@ -6,7 +6,7 @@
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
 //  forwards them to iTunes/Music and/or Spotify over Scripting Bridge and to
-//  Cider and Spotifast over their local RPC channels. A status-bar menu
+//  Cider, Spotifast and Pear over their local RPC channels. A status-bar menu
 //  offers the quick controls (pause, prioritized player) and a Settings
 //  window holds everything else.
 //
@@ -35,6 +35,8 @@ enum MediaKeysPrioritize: Int {
     case cider = 3
     // If several apps are open, prioritize Spotifast.
     case spotifast = 4
+    // If several apps are open, prioritize Pear.
+    case pear = 5
 }
 
 enum PauseState: Int {
@@ -91,6 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var mediaKeysPriority: MediaKeysPrioritize { settings.priority }
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
+    private let pearController = PearController()
 
     // MARK: UI / system
 
@@ -158,13 +161,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let spotifyRunning = spotifyApp?.isRunning ?? false
         let ciderRunning = ciderController.isRunning
         let spotifastRunning = spotifastController.isRunning
+        let pearRunning = pearController.isRunning
 
         if pauseState == .pause {
             return Unmanaged.passUnretained(event)
         }
 
         if pauseState == .automatic {
-            if !spotifyRunning && !musicRunning && !ciderRunning && !spotifastRunning {
+            if !spotifyRunning && !musicRunning && !ciderRunning && !spotifastRunning && !pearRunning {
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -226,6 +230,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 default:
                     break
                 }
+            case .pear:
+                switch keyCode {
+                case NX_KEYTYPE_PLAY:
+                    pearController.playPause()
+                case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                    pearController.nextTrack()
+                case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                    pearController.previousTrack()
+                default:
+                    break
+                }
             case .none:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
@@ -233,16 +248,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     if musicRunning { iTunes?.playpause?() }
                     if ciderRunning { ciderController.playPause() }
                     if spotifastRunning { spotifastController.playPause() }
+                    if pearRunning { pearController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { iTunes?.nextTrack?() }
                     if ciderRunning { ciderController.nextTrack() }
                     if spotifastRunning { spotifastController.nextTrack() }
+                    if pearRunning { pearController.nextTrack() }
                 case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
                     if spotifyRunning { spotify?.previousTrack?() }
                     if musicRunning { iTunes?.backTrack?() }
                     if ciderRunning { ciderController.previousTrack() }
                     if spotifastRunning { spotifastController.previousTrack() }
+                    if pearRunning { pearController.previousTrack() }
                 default:
                     break
                 }
@@ -312,6 +330,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                                                 keyEquivalent: ""))
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Spotifast", comment: "Prioritize Spotifast"),
                                                 action: #selector(prioritizeSpotifast),
+                                                keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Pear (YouTube Music)", comment: "Prioritize Pear (YouTube Music)"),
+                                                action: #selector(prioritizePear),
                                                 keyEquivalent: ""))
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
@@ -490,6 +511,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func prioritizeSpotifast() {
         settings.priority = .spotifast
+    }
+
+    @objc private func prioritizePear() {
+        settings.priority = .pear
     }
 
     // MARK: Settings window

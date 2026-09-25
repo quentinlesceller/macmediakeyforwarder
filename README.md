@@ -1,8 +1,8 @@
 # Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh) and [Spotifast](https://spotifast.rocks).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks) and [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music).
 
-Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider or Spotifast directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast or Pear (YouTube Music) directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
@@ -20,6 +20,14 @@ Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cide
 **Spotifast support**
 
 Spotifast likewise ships no AppleScript dictionary. The running instance listens on a local loopback socket (`127.0.0.1:47113`) for its own `fastpotify` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast running.
+
+**Pear Desktop (YouTube Music) support**
+
+Pear does not ship an AppleScript dictionary either, so it is controlled through the local HTTP API of its API Server plugin (`http://localhost:26538`). For it to work:
+
+- In Pear, enable the **API Server** plugin under **Plugins**.
+- Keep its port at the default 26538.
+- On the first media key press Pear asks whether to allow "MacMediaKeyForwarder"; approve it. The access token is stored and reused afterwards.
 
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
