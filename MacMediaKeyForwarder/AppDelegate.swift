@@ -6,8 +6,9 @@
 //
 //  Intercepts the system-defined media key events with a CGEventTap and
 //  forwards them to Music and/or Spotify over Scripting Bridge and to
-//  Cider, Spotifast and Pear over their local RPC channels. A status-bar menu
-//  offers the quick controls (pause, prioritized player) and a Settings
+//  Cider, Spotifast and Pear over their local RPC channels. TIDAL and Deezer
+//  are driven through their menu bar commands. A status-bar menu offers the
+//  quick controls (pause, prioritized player) and a Settings
 //  window holds everything else.
 //
 
@@ -39,6 +40,10 @@ enum MediaKeysPrioritize: Int {
     case pear = 5
     // If several apps are open, prioritize Radiola.
     case radiola = 6
+    // If several apps are open, prioritize TIDAL.
+    case tidal = 7
+    // If several apps are open, prioritize Deezer.
+    case deezer = 8
 }
 
 enum PauseState: Int {
@@ -103,6 +108,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let spotifastController = SpotifastController()
     private let pearController = PearController()
     private let radiolaController = RadiolaController()
+    private let tidalController = MenuBarPlayerController(bundleIdentifier: "com.tidal.desktop")
+    private let deezerController = MenuBarPlayerController(bundleIdentifier: "com.deezer.deezer-desktop")
     private let volumeQueue = DispatchQueue(label: "MacMediaKeyForwarder.volume")
     // Music's volume before the mute key set it to 0; accessed on volumeQueue.
     private var mutedMusicVolume: Int?
@@ -175,6 +182,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let spotifastRunning = spotifastController.isRunning
         let pearRunning = pearController.isRunning
         let radiolaRunning = radiolaController.isRunning
+        let tidalRunning = tidalController.isRunning
+        let deezerRunning = deezerController.isRunning
 
         if pauseState == .pause {
             return Unmanaged.passUnretained(event)
@@ -186,7 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             (mediaKeysPriority == .radiola || (mediaKeysPriority == .none && settings.radiolaInAllPlayers))
 
         if pauseState == .automatic {
-            let otherPlayerRunning = spotifyRunning || musicRunning || ciderRunning || spotifastRunning || pearRunning
+            let otherPlayerRunning = spotifyRunning || musicRunning || ciderRunning || spotifastRunning || pearRunning || tidalRunning || deezerRunning
             // With Radiola as the only player open, let every key Radiola
             // will not handle through, so Next and Previous still reach macOS.
             if !otherPlayerRunning && !(radiolaTakesPlayPause && keyCode == NX_KEYTYPE_PLAY) {
@@ -289,6 +298,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 if keyCode == NX_KEYTYPE_PLAY && radiolaTakesPlayPause {
                     radiolaController.playPause()
                 }
+            case .tidal:
+                switch keyCode {
+                case NX_KEYTYPE_PLAY:
+                    tidalController.playPause()
+                case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                    tidalController.nextTrack()
+                case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                    tidalController.previousTrack()
+                default:
+                    break
+                }
+            case .deezer:
+                switch keyCode {
+                case NX_KEYTYPE_PLAY:
+                    deezerController.playPause()
+                case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                    deezerController.nextTrack()
+                case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                    deezerController.previousTrack()
+                default:
+                    break
+                }
             case .none:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
@@ -298,18 +329,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     if spotifastRunning { spotifastController.playPause() }
                     if pearRunning { pearController.playPause() }
                     if radiolaTakesPlayPause { radiolaController.playPause() }
+                    if tidalRunning { tidalController.playPause() }
+                    if deezerRunning { deezerController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { music?.nextTrack?() }
                     if ciderRunning { ciderController.nextTrack() }
                     if spotifastRunning { spotifastController.nextTrack() }
                     if pearRunning { pearController.nextTrack() }
+                    if tidalRunning { tidalController.nextTrack() }
+                    if deezerRunning { deezerController.nextTrack() }
                 case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
                     if spotifyRunning { spotify?.previousTrack?() }
                     if musicRunning { music?.backTrack?() }
                     if ciderRunning { ciderController.previousTrack() }
                     if spotifastRunning { spotifastController.previousTrack() }
                     if pearRunning { pearController.previousTrack() }
+                    if tidalRunning { tidalController.previousTrack() }
+                    if deezerRunning { deezerController.previousTrack() }
                 default:
                     break
                 }
@@ -562,6 +599,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Radiola", comment: "Prioritize Radiola"),
                                                 action: #selector(prioritizeRadiola),
                                                 keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize TIDAL", comment: "Prioritize TIDAL"),
+                                                action: #selector(prioritizeTidal),
+                                                keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Deezer", comment: "Prioritize Deezer"),
+                                                action: #selector(prioritizeDeezer),
+                                                keyEquivalent: ""))
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
@@ -747,6 +790,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func prioritizeRadiola() {
         settings.priority = .radiola
+    }
+
+    @objc private func prioritizeTidal() {
+        settings.priority = .tidal
+    }
+
+    @objc private func prioritizeDeezer() {
+        settings.priority = .deezer
     }
 
     // MARK: Settings window
