@@ -91,6 +91,10 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.4.0 :*
+- Optional volume keys for Apple Music: turn on "Also send volume keys to Apple Music" in Settings > Players and the volume and mute keys also change Apple Music's own volume, so they can control AirPlay speakers. The system volume still changes as usual. Off by default.
+- iTunes is now called Apple Music throughout the app ("Prioritize Apple Music"). Existing settings carry over.
+
 *What's new in version 4.3.0 :*
 - Pear Desktop (YouTube Music) support: play/pause, next and previous now also work with [Pear](https://github.com/pear-devs/pear-desktop) (controlled through the local HTTP API of its API Server plugin; enable that plugin in Pear and approve the access request on the first key press). New "Prioritize Pear (YouTube Music)" option. Thanks to @stefanceriu!
 
