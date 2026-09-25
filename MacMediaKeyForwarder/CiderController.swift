@@ -4,7 +4,7 @@
 //
 //  Controls the Cider Apple Music client (https://cider.sh) through its local
 //  REST API. Cider is an Electron app and ships no AppleScript scripting
-//  dictionary, so it cannot be driven over Scripting Bridge like iTunes/Music
+//  dictionary, so it cannot be driven over Scripting Bridge like Music
 //  and Spotify; instead it exposes an HTTP RPC server on localhost (default
 //  port 10767, POST /api/v1/playback/{playpause,next,previous}).
 //
