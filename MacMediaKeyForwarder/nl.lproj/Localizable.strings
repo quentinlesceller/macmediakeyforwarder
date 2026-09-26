@@ -30,3 +30,10 @@
 "Prioritized player" = "Speler met voorrang";
 "Reopen the app to show the icon again." = "Open de app opnieuw om het symbool weer te tonen.";
 "Hide from menu bar" = "Verberg uit de menubalk";
+"Launch player hidden" = "Speler verborgen starten";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Als het voorkeurs-Apple Music of -Spotify niet actief is, start een mediatoets het verborgen in plaats van het venster naar voren te halen.";
+"Also send volume keys to Apple Music" = "Volumetoetsen ook naar Apple Music sturen";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Wijzigt het eigen volume van Apple Music samen met het systeemvolume, zodat de volumetoetsen AirPlay-luidsprekers kunnen bedienen.";
+"Cider API Token" = "Cider API-token";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Plak het token dat in Cider is aangemaakt via Settings > Connectivity > Manage External Application Access to Cider. Laat leeg als externe toegang geen token vereist.";
+"Optional" = "Optioneel";

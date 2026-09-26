@@ -29,6 +29,10 @@ Pear does not ship an AppleScript dictionary either, so it is controlled through
 - Keep its port at the default 26538.
 - On the first media key press Pear asks whether to allow "MacMediaKeyForwarder"; approve it. The access token is stored and reused afterwards.
 
+**Launch player hidden**
+
+When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast and Pear are never launched by Mac Media Key Forwarder.
+
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
 If you want even more control over what you want to control you should try [beardedspice](http://beardedspice.github.io).
@@ -90,6 +94,11 @@ The Automation permission is requested the first time you press a media key. All
 Thank you!!!
 
 ---
+
+*What's new in version 4.5.0 :*
+- Launch player hidden: turn on "Launch player hidden" in Settings > Players and a media key press starts a prioritized Apple Music or Spotify that is not running hidden, instead of bringing its window to the front, then sends it the key. Off by default. (#40)
+- Redesigned Settings window: toolbar tabs like other Mac apps, and the window now fits each tab instead of leaving empty space or cutting off the Players tab. Option descriptions sit under each option.
+- Completed the translations of the Settings window: the Apple Music volume keys option and the Cider API token field are now translated in every language.
 
 *What's new in version 4.4.0 :*
 - Optional volume keys for Apple Music: turn on "Also send volume keys to Apple Music" in Settings > Players and the volume and mute keys also change Apple Music's own volume, so they can control AirPlay speakers. The system volume still changes as usual. Off by default.

@@ -28,3 +28,10 @@
 "Prioritized player" = "Bevorzugter Player";
 "Reopen the app to show the icon again." = "App erneut öffnen, um das Symbol wieder anzuzeigen.";
 "Hide from menu bar" = "Aus der Menüleiste ausblenden";
+"Launch player hidden" = "Player versteckt starten";
+"When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Wenn das bevorzugte Apple Music oder Spotify nicht läuft, startet eine Medientaste es ausgeblendet, statt sein Fenster in den Vordergrund zu holen.";
+"Also send volume keys to Apple Music" = "Lautstärketasten auch an Apple Music senden";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Ändert die Lautstärke von Apple Music zusammen mit der Systemlautstärke, sodass die Lautstärketasten AirPlay-Lautsprecher steuern können.";
+"Cider API Token" = "Cider-API-Token";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Füge das Token ein, das in Cider unter Settings > Connectivity > Manage External Application Access to Cider erzeugt wurde. Leer lassen, wenn der externe Zugriff kein Token erfordert.";
+"Optional" = "Optional";

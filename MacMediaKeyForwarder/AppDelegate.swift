@@ -17,7 +17,6 @@ import Combine
 import CoreAudio
 import CoreServices
 import ScriptingBridge
-import SwiftUI
 
 // MARK: - State
 
@@ -95,6 +94,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var keyHoldStatus: KeyHoldState = .none
     private var pauseState: PauseState { settings.pauseState }
     private var mediaKeysPriority: MediaKeysPrioritize { settings.priority }
+    // Bundle identifiers of players currently being launched hidden; presses
+    // that arrive while a launch is in flight are dropped rather than queued.
+    private var pendingHiddenLaunches: Set<String> = []
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
     private let pearController = PearController()
@@ -110,7 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var accessibilityPollTimer: Timer?
     private var priorityOptionItems: [NSMenuItem] = []
     private var pauseItem: NSMenuItem!
-    private var settingsWindow: NSWindow?
+    private var settingsWindowController: SettingsWindowController?
 
     // The bundle identifier of Apple's Music app.
     private let musicBundleIdentifier = "com.apple.music"
@@ -184,6 +186,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let keyIsPressed = ((keyFlags & 0xFF00) >> 8) == 0xA
 
         if keyIsPressed {
+            // Sending an Apple Event to a player that is not running launches it
+            // with its window in front. When the user asked for a hidden launch,
+            // start the prioritized player ourselves instead and send the
+            // command once it is up (#40).
+            if settings.launchPlayerHidden {
+                if mediaKeysPriority == .spotify && !spotifyRunning {
+                    launchHidden(bundleIdentifier: "com.spotify.client") { [weak self] in
+                        self?.sendAfterHiddenLaunch(keyCode: keyCode, to: .spotify)
+                    }
+                    keyHoldStatus = .none
+                    return nil
+                }
+                if mediaKeysPriority == .music && !musicRunning {
+                    launchHidden(bundleIdentifier: musicBundleIdentifier) { [weak self] in
+                        self?.sendAfterHiddenLaunch(keyCode: keyCode, to: .music)
+                    }
+                    keyHoldStatus = .none
+                    return nil
+                }
+            }
+
             switch mediaKeysPriority {
             case .music:
                 switch keyCode {
@@ -381,6 +404,99 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         address.mScope = kAudioDevicePropertyScopeOutput
         guard AudioObjectGetPropertyData(deviceID, &address, 0, nil, &size, &muted) == noErr else { return nil }
         return muted != 0
+    }
+
+    // MARK: - Hidden launch
+
+    /// Launches the player hidden and without activating it, then runs
+    /// `command` once the app reports it has finished launching. Spotify
+    /// sometimes un-hides itself shortly after launch, so the app is hidden
+    /// again as soon as it is ready and re-checked for a few seconds.
+    private func launchHidden(bundleIdentifier: String, then command: @escaping () -> Void) {
+        guard !pendingHiddenLaunches.contains(bundleIdentifier),
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+            return
+        }
+        pendingHiddenLaunches.insert(bundleIdentifier)
+
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.hides = true
+        configuration.activates = false
+
+        NSWorkspace.shared.openApplication(at: url, configuration: configuration) { [weak self] application, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                guard let application = application else {
+                    self.pendingHiddenLaunches.remove(bundleIdentifier)
+                    return
+                }
+                self.waitForLaunch(of: application, attemptsLeft: 100) {
+                    application.hide()
+                    self.pendingHiddenLaunches.remove(bundleIdentifier)
+                    command()
+                    self.keepHidden(application, checksLeft: 6)
+                }
+            }
+        }
+    }
+
+    /// Polls `isFinishedLaunching` every 100 ms (up to ~10 s) on the main queue.
+    private func waitForLaunch(of application: NSRunningApplication, attemptsLeft: Int, then ready: @escaping () -> Void) {
+        if application.isFinishedLaunching {
+            ready()
+            return
+        }
+        guard attemptsLeft > 0, !application.isTerminated else {
+            pendingHiddenLaunches.remove(application.bundleIdentifier ?? "")
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.waitForLaunch(of: application, attemptsLeft: attemptsLeft - 1, then: ready)
+        }
+    }
+
+    /// Re-hides the app if it shows itself during the seconds after launch.
+    private func keepHidden(_ application: NSRunningApplication, checksLeft: Int) {
+        guard checksLeft > 0, !application.isTerminated else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            if !application.isHidden {
+                application.hide()
+            }
+            self?.keepHidden(application, checksLeft: checksLeft - 1)
+        }
+    }
+
+    /// Forwards the media key that triggered a hidden launch to the freshly
+    /// launched player.
+    private func sendAfterHiddenLaunch(keyCode: Int, to player: MediaKeysPrioritize) {
+        switch player {
+        case .spotify:
+            let spotify: SpotifyApplication? = SBApplication(bundleIdentifier: "com.spotify.client")
+            switch keyCode {
+            case NX_KEYTYPE_PLAY:
+                spotify?.playpause?()
+            case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                spotify?.nextTrack?()
+            case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                spotify?.previousTrack?()
+            default:
+                break
+            }
+        case .music:
+            let music: MusicApplication? = SBApplication(bundleIdentifier: musicBundleIdentifier)
+            switch keyCode {
+            case NX_KEYTYPE_PLAY:
+                music?.playpause?()
+            case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
+                music?.nextTrack?()
+            case NX_KEYTYPE_PREVIOUS, NX_KEYTYPE_REWIND:
+                music?.backTrack?()
+            default:
+                break
+            }
+        default:
+            break
+        }
     }
 
     // MARK: - Application lifecycle
@@ -610,18 +726,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: Settings window
 
     @objc private func openSettings() {
-        if settingsWindow == nil {
-            let controller = NSHostingController(rootView: SettingsView(settings: settings))
-            let window = NSWindow(contentViewController: controller)
-            window.title = NSLocalizedString("Settings", comment: "Settings")
-            window.styleMask = [.titled, .closable]
-            window.isReleasedWhenClosed = false
-            window.center()
-            settingsWindow = window
+        if settingsWindowController == nil {
+            settingsWindowController = SettingsWindowController(settings: settings)
         }
         // The app is a background (LSUIElement) app, so bring the window forward.
         NSApp.activate(ignoringOtherApps: true)
-        settingsWindow?.makeKeyAndOrderFront(nil)
+        settingsWindowController?.showWindow(nil)
     }
 
     // MARK: - UI refresh

@@ -21,6 +21,7 @@ final class AppSettings: ObservableObject {
     private static let pauseKey = "user_pause_option"
     private static let hideFromMenuBarKey = "user_hide_from_menu_bar_option"
     private static let forwardVolumeToMusicKey = "user_forward_volume_to_music_option"
+    private static let launchPlayerHiddenKey = "user_launch_hidden_option"
 
     private let defaults = UserDefaults.standard
 
@@ -44,6 +45,13 @@ final class AppSettings: ObservableObject {
     /// AirPlay speakers follow. The system volume still changes as usual.
     @Published var forwardVolumeToMusic: Bool {
         didSet { defaults.set(forwardVolumeToMusic, forKey: Self.forwardVolumeToMusicKey) }
+    }
+
+    /// Launches a prioritized Apple Music or Spotify hidden when a media key
+    /// is pressed while it is not running, instead of bringing its window
+    /// forward.
+    @Published var launchPlayerHidden: Bool {
+        didSet { defaults.set(launchPlayerHidden, forKey: Self.launchPlayerHiddenKey) }
     }
 
     /// Token for Cider's external application access. Stored trimmed; an empty
@@ -86,6 +94,7 @@ final class AppSettings: ObservableObject {
         pauseState = PauseState(rawValue: pauseValue) ?? .none
         hideFromMenuBar = defaults.bool(forKey: Self.hideFromMenuBarKey)
         forwardVolumeToMusic = defaults.bool(forKey: Self.forwardVolumeToMusicKey)
+        launchPlayerHidden = defaults.bool(forKey: Self.launchPlayerHiddenKey)
         ciderApiToken = defaults.string(forKey: CiderController.apiTokenKey) ?? ""
     }
 }
