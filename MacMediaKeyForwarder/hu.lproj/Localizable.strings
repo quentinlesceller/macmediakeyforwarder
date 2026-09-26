@@ -29,3 +29,7 @@
 "Hide from menu bar" = "Elrejtés a menüsorból";
 "Launch player hidden" = "Lejátszó indítása rejtve";
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Ha a fontosabbnak jelölt Apple Music vagy Spotify nem fut, a médiabillentyű rejtve indítja el, ahelyett hogy az ablakát előtérbe hozná.";
+"Also send volume keys to Apple Music" = "Hangerőbillentyűk küldése az Apple Musicnak is";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Az Apple Music saját hangerejét is módosítja a rendszerhangerővel együtt, így a hangerőbillentyűkkel AirPlay-hangszórók is vezérelhetők.";
+"Cider API Token" = "Cider API-token";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Illeszd be a Ciderben a(z) Settings > Connectivity > Manage External Application Access to Cider alatt létrehozott tokent. Hagyd üresen, ha a külső hozzáféréshez nem kell token.";

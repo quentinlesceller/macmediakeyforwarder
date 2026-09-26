@@ -31,3 +31,7 @@
 "Hide from menu bar" = "Skjul fra menulinjen";
 "Launch player hidden" = "Start afspiller skjult";
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Når den prioriterede Apple Music eller Spotify ikke kører, starter en medietast den skjult i stedet for at vise dens vindue forrest.";
+"Also send volume keys to Apple Music" = "Send også lydstyrketaster til Apple Music";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Ændrer Apple Musics egen lydstyrke sammen med systemets lydstyrke, så lydstyrketasterne kan styre AirPlay-højttalere.";
+"Cider API Token" = "Cider API-token";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Indsæt det token, der er genereret i Cider under Settings > Connectivity > Manage External Application Access to Cider. Lad feltet være tomt, hvis ekstern adgang ikke kræver et token.";

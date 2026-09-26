@@ -31,3 +31,7 @@
 "Reopen the app to show the icon again." = "Avaa sovellus uudelleen näyttääksesi kuvakkeen.";
 "Launch player hidden" = "Käynnistä soitin piilotettuna";
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Kun ensisijainen Apple Music tai Spotify ei ole käynnissä, medianäppäin käynnistää sen piilotettuna sen sijaan, että sen ikkuna tuotaisiin eteen.";
+"Also send volume keys to Apple Music" = "Lähetä äänenvoimakkuusnäppäimet myös Apple Musicille";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Muuttaa Apple Musicin omaa äänenvoimakkuutta järjestelmän äänenvoimakkuuden mukana, jolloin äänenvoimakkuusnäppäimillä voi ohjata AirPlay-kaiuttimia.";
+"Cider API Token" = "Ciderin API-tunnus";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Liitä Ciderissa kohdassa Settings > Connectivity > Manage External Application Access to Cider luotu tunnus. Jätä tyhjäksi, jos ulkoinen käyttö ei vaadi tunnusta.";

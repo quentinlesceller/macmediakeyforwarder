@@ -30,3 +30,7 @@
 "Hide from menu bar" = "메뉴 막대에서 숨기기";
 "Launch player hidden" = "플레이어를 숨김 상태로 실행";
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "우선 순위로 지정한 Apple Music 또는 Spotify가 실행 중이 아닐 때, 미디어 키를 누르면 윈도우를 앞으로 가져오지 않고 숨김 상태로 실행합니다.";
+"Also send volume keys to Apple Music" = "음량 키를 Apple Music에도 보내기";
+"Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "시스템 음량과 함께 Apple Music 자체 음량도 변경하여, 음량 키로 AirPlay 스피커를 제어할 수 있습니다.";
+"Cider API Token" = "Cider API 토큰";
+"Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Cider의 Settings > Connectivity > Manage External Application Access to Cider에서 생성한 토큰을 붙여 넣으십시오. 외부 접근에 토큰이 필요하지 않으면 비워 두십시오.";
