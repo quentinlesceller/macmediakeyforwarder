@@ -95,6 +95,10 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.5.0 :*
+- Launch player hidden: turn on "Launch player hidden" in Settings > Players and a media key press starts a prioritized Apple Music or Spotify that is not running hidden, instead of bringing its window to the front, then sends it the key. Off by default. (#40)
+- Completed the translations of the Settings window: the Apple Music volume keys option and the Cider API token field are now translated in every language.
+
 *What's new in version 4.4.0 :*
 - Optional volume keys for Apple Music: turn on "Also send volume keys to Apple Music" in Settings > Players and the volume and mute keys also change Apple Music's own volume, so they can control AirPlay speakers. The system volume still changes as usual. Off by default.
 - iTunes is now called Apple Music throughout the app ("Prioritize Apple Music"). Existing settings carry over.
