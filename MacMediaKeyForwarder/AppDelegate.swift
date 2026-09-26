@@ -17,7 +17,6 @@ import Combine
 import CoreAudio
 import CoreServices
 import ScriptingBridge
-import SwiftUI
 
 // MARK: - State
 
@@ -113,7 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var accessibilityPollTimer: Timer?
     private var priorityOptionItems: [NSMenuItem] = []
     private var pauseItem: NSMenuItem!
-    private var settingsWindow: NSWindow?
+    private var settingsWindowController: SettingsWindowController?
 
     // The bundle identifier of Apple's Music app.
     private let musicBundleIdentifier = "com.apple.music"
@@ -727,18 +726,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: Settings window
 
     @objc private func openSettings() {
-        if settingsWindow == nil {
-            let controller = NSHostingController(rootView: SettingsView(settings: settings))
-            let window = NSWindow(contentViewController: controller)
-            window.title = NSLocalizedString("Settings", comment: "Settings")
-            window.styleMask = [.titled, .closable]
-            window.isReleasedWhenClosed = false
-            window.center()
-            settingsWindow = window
+        if settingsWindowController == nil {
+            settingsWindowController = SettingsWindowController(settings: settings)
         }
         // The app is a background (LSUIElement) app, so bring the window forward.
         NSApp.activate(ignoringOtherApps: true)
-        settingsWindow?.makeKeyAndOrderFront(nil)
+        settingsWindowController?.showWindow(nil)
     }
 
     // MARK: - UI refresh

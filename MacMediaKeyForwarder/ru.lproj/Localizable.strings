@@ -34,3 +34,4 @@
 "Cider API Token" = "API-токен Cider";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Вставьте токен, созданный в Cider в разделе Settings > Connectivity > Manage External Application Access to Cider. Оставьте поле пустым, если внешний доступ не требует токена.";
 "Open at login" = "Открывать при входе в систему";
+"Optional" = "Необязательно";

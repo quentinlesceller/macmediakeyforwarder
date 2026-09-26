@@ -34,3 +34,4 @@
 "Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "시스템 음량과 함께 Apple Music 자체 음량도 변경하여, 음량 키로 AirPlay 스피커를 제어할 수 있습니다.";
 "Cider API Token" = "Cider API 토큰";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Cider의 Settings > Connectivity > Manage External Application Access to Cider에서 생성한 토큰을 붙여 넣으십시오. 외부 접근에 토큰이 필요하지 않으면 비워 두십시오.";
+"Optional" = "선택 사항";

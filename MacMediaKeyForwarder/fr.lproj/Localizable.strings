@@ -28,3 +28,4 @@
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "Lorsque Apple Music ou Spotify, le lecteur prioritaire, n'est pas ouvert, une touche multimédia le lance masqué au lieu d'afficher sa fenêtre au premier plan.";
 "Also send volume keys to Apple Music" = "Envoyer aussi les touches de volume à Apple Music";
 "Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Modifie le volume propre d'Apple Music en même temps que le volume du système, ce qui permet de contrôler les enceintes AirPlay avec les touches de volume.";
+"Optional" = "Facultatif";
