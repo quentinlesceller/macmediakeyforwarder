@@ -19,7 +19,7 @@ Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cide
 
 **Spotifast support**
 
-Spotifast likewise ships no AppleScript dictionary. The running instance listens on a local loopback socket (`127.0.0.1:47113`) for its own `fastpotify` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast running.
+Spotifast likewise ships no AppleScript dictionary. The running instance listens on a private local socket for its own `spotifast` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast 0.12.0 or later running.
 
 **Pear Desktop (YouTube Music) support**
 
@@ -94,6 +94,9 @@ The Automation permission is requested the first time you press a media key. All
 Thank you!!!
 
 ---
+
+*What's new in version 4.5.1 :*
+- Fixed Spotifast support for Spotifast 0.12.0 and later, which replaced the local port the media keys were sent to (#50). Requires Spotifast 0.12.0 or later.
 
 *What's new in version 4.5.0 :*
 - Launch player hidden: turn on "Launch player hidden" in Settings > Players and a media key press starts a prioritized Apple Music or Spotify that is not running hidden, instead of bringing its window to the front, then sends it the key. Off by default. (#40)
