@@ -19,7 +19,7 @@ Apple Music and Spotify are controlled over AppleScript (Scripting Bridge). Cide
 
 **Spotifast support**
 
-Spotifast likewise ships no AppleScript dictionary. The running instance listens on a local loopback socket (`127.0.0.1:47113`) for its own `fastpotify` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast running.
+Spotifast likewise ships no AppleScript dictionary. The running instance listens on a private local socket for its own `spotifast` command-line tool, and Mac Media Key Forwarder talks to it the same way. No setup is required — just have Spotifast 0.12.0 or later running.
 
 **Pear Desktop (YouTube Music) support**
 
