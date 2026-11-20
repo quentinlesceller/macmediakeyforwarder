@@ -1,8 +1,8 @@
 # Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks) and [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks), [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music) and [Radiola](https://github.com/SokoloffA/radiola).
 
-Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast or Pear (YouTube Music) directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast, Pear (YouTube Music) or Radiola directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
@@ -29,9 +29,17 @@ Pear does not ship an AppleScript dictionary either, so it is controlled through
 - Keep its port at the default 26538.
 - On the first media key press Pear asks whether to allow "MacMediaKeyForwarder"; approve it. The access token is stored and reused afterwards.
 
+**Radiola support**
+
+Radiola has no AppleScript dictionary or local API, so play/pause is sent through its global shortcut. For it to work:
+
+- In Radiola, open **Settings > Controls** and record **⌃⌥⌘P** (Control-Option-Command-P) as the **Global shortcut to toggle play and pause**. You never press it yourself; Mac Media Key Forwarder sends it when you press the play/pause media key.
+
+Radiola plays live streams, so the next and previous keys do nothing while it is prioritized.
+
 **Launch player hidden**
 
-When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast and Pear are never launched by Mac Media Key Forwarder.
+When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast, Pear and Radiola are never launched by Mac Media Key Forwarder.
 
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 
