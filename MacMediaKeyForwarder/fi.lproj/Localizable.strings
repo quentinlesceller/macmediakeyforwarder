@@ -20,6 +20,7 @@
 "Prioritize Cider" = "Cider etusijalla";
 "Prioritize Spotifast" = "Spotifast etusijalla";
 "Prioritize Pear (YouTube Music)" = "Pear (YouTube Music) etusijalla";
+"Prioritize Radiola" = "Radiola etusijalla";
 "Settings…" = "Asetukset…";
 "Settings" = "Asetukset";
 "General" = "Yleiset";
@@ -36,3 +37,6 @@
 "Cider API Token" = "Ciderin API-tunnus";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Liitä Ciderissa kohdassa Settings > Connectivity > Manage External Application Access to Cider luotu tunnus. Jätä tyhjäksi, jos ulkoinen käyttö ei vaadi tunnusta.";
 "Optional" = "Valinnainen";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Sisällytä Radiola, kun tapahtumat lähetetään kaikille soittimille";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Toista/tauko ohjaa myös Radiolaa lähettämällä ⌃⌥⌘P. Tallenna oikotie ensin Radiolaan kohdassa Asetukset > Controls, muuten se voi käynnistää toisen apin oikotien.";

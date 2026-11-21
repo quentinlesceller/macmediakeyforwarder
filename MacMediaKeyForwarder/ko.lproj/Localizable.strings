@@ -17,6 +17,7 @@
 "Prioritize Cider" = "Cider에 우선권 부여";
 "Prioritize Spotifast" = "Spotifast에 우선권 부여";
 "Prioritize Pear (YouTube Music)" = "Pear (YouTube Music)에 우선권 부여";
+"Prioritize Radiola" = "Radiola에 우선권 부여";
 "Set Cider API Token…" = "Cider API 토큰 설정…";
 "Settings…" = "설정…";
 "Settings" = "설정";
@@ -35,3 +36,6 @@
 "Cider API Token" = "Cider API 토큰";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Cider의 Settings > Connectivity > Manage External Application Access to Cider에서 생성한 토큰을 붙여 넣으십시오. 외부 접근에 토큰이 필요하지 않으면 비워 두십시오.";
 "Optional" = "선택 사항";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "모든 플레이어에 이벤트를 보낼 때 Radiola 포함";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "재생/일시정지 시 ⌃⌥⌘P를 보내 Radiola도 전환합니다. 먼저 Radiola의 설정 > Controls에서 이 단축키를 등록하세요. 그렇지 않으면 다른 앱의 단축키가 실행될 수 있습니다.";

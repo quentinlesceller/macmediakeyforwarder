@@ -11,6 +11,7 @@
 "Prioritize Cider" = "Ciderを優先";
 "Prioritize Spotifast" = "Spotifastを優先";
 "Prioritize Pear (YouTube Music)" = "Pear (YouTube Music)を優先";
+"Prioritize Radiola" = "Radiolaを優先";
 "Set Cider API Token…" = "Cider APIトークンを設定…";
 "Settings…" = "設定…";
 "Settings" = "設定";
@@ -29,3 +30,6 @@
 "Cider API Token" = "Cider APIトークン";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Ciderの「Settings > Connectivity > Manage External Application Access to Cider」で生成したトークンを貼り付けてください。外部アクセスにトークンが不要な場合は空欄のままにします。";
 "Optional" = "オプション";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "すべてのプレーヤーにイベントを送信するときに Radiola を含める";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "再生/一時停止で ⌃⌥⌘P を送信し、Radiola も切り替えます。先に Radiola の設定 > Controls でこのショートカットを登録してください。登録しないと別のアプリのショートカットが実行されることがあります。";
