@@ -104,6 +104,9 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.6.0 :*
+- Added play/pause support for Radiola. Set its global toggle shortcut to ⌃⌥⌘P, then select Prioritize Radiola or include it under Settings > Players when sending events to all players. (#52)
+
 *What's new in version 4.5.1 :*
 - Fixed Spotifast support for Spotifast 0.12.0 and later, which replaced the local port the media keys were sent to (#50). Requires Spotifast 0.12.0 or later.
 
