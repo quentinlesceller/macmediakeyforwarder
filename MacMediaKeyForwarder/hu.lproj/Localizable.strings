@@ -35,3 +35,6 @@
 "Cider API Token" = "Cider API-token";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Illeszd be a Ciderben a(z) Settings > Connectivity > Manage External Application Access to Cider alatt létrehozott tokent. Hagyd üresen, ha a külső hozzáféréshez nem kell token.";
 "Optional" = "Nem kötelező";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Radiola bevonása, amikor az események minden lejátszónak mennek";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "A lejátszás/szünet a Radiolát is vezérli a ⌃⌥⌘P elküldésével. Előbb rögzítsd ezt a billentyűparancsot a Radiolában a Beállítások > Controls alatt, különben egy másik app parancsát indíthatja el.";

@@ -151,6 +151,12 @@ private struct PlayersSettingsView: View {
                     Text("Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers.")
                 }
             }
+            Section("Radiola") {
+                Toggle(isOn: $settings.radiolaInAllPlayers) {
+                    Text("Include Radiola when sending events to all players")
+                    Text("Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut.")
+                }
+            }
             Section {
                 SecureField(text: $settings.ciderApiToken, prompt: Text("Optional")) {
                     Text("Cider API Token")

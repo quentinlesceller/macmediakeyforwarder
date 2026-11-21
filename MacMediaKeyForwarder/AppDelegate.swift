@@ -180,8 +180,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return Unmanaged.passUnretained(event)
         }
 
+        // Radiola only takes play/pause, and only when it is prioritized or the
+        // user opted in to sending its shortcut to all players.
+        let radiolaTakesPlayPause = radiolaRunning &&
+            (mediaKeysPriority == .radiola || (mediaKeysPriority == .none && settings.radiolaInAllPlayers))
+
         if pauseState == .automatic {
-            if !spotifyRunning && !musicRunning && !ciderRunning && !spotifastRunning && !pearRunning && !radiolaRunning {
+            let otherPlayerRunning = spotifyRunning || musicRunning || ciderRunning || spotifastRunning || pearRunning
+            // With Radiola as the only player open, let every key Radiola
+            // will not handle through, so Next and Previous still reach macOS.
+            if !otherPlayerRunning && !(radiolaTakesPlayPause && keyCode == NX_KEYTYPE_PLAY) {
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -278,7 +286,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             case .radiola:
                 // Unlike the Apple Event players, a keystroke cannot launch
                 // Radiola, so there is nothing to do while it is closed.
-                if keyCode == NX_KEYTYPE_PLAY && radiolaRunning {
+                if keyCode == NX_KEYTYPE_PLAY && radiolaTakesPlayPause {
                     radiolaController.playPause()
                 }
             case .none:
@@ -289,7 +297,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     if ciderRunning { ciderController.playPause() }
                     if spotifastRunning { spotifastController.playPause() }
                     if pearRunning { pearController.playPause() }
-                    if radiolaRunning { radiolaController.playPause() }
+                    if radiolaTakesPlayPause { radiolaController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { music?.nextTrack?() }

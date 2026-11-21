@@ -34,8 +34,9 @@ Pear does not ship an AppleScript dictionary either, so it is controlled through
 Radiola has no AppleScript dictionary or local API, so play/pause is sent through its global shortcut. For it to work:
 
 - In Radiola, open **Settings > Controls** and record **⌃⌥⌘P** (Control-Option-Command-P) as the **Global shortcut to toggle play and pause**. You never press it yourself; Mac Media Key Forwarder sends it when you press the play/pause media key.
+- To control Radiola with **Send events to all players**, also turn on **Include Radiola when sending events to all players** under **Settings… > Players**. It is off by default, so ⌃⌥⌘P is never sent to an app that has not recorded it.
 
-Radiola plays live streams, so the next and previous keys do nothing while it is prioritized.
+Radiola plays live streams, so the next and previous keys do nothing while it is prioritized. With **Pause if no player is running** and Radiola as the only supported player open, next and previous are passed on to macOS.
 
 **Launch player hidden**
 

@@ -30,3 +30,6 @@
 "Also send volume keys to Apple Music" = "Envoyer aussi les touches de volume à Apple Music";
 "Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Modifie le volume propre d'Apple Music en même temps que le volume du système, ce qui permet de contrôler les enceintes AirPlay avec les touches de volume.";
 "Optional" = "Facultatif";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Inclure Radiola lors de l'envoi des événements à tous les lecteurs";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Lecture/pause bascule aussi Radiola en envoyant ⌃⌥⌘P. Enregistrez d'abord ce raccourci dans Radiola sous Réglages > Controls, sinon il peut déclencher le raccourci d'une autre app.";

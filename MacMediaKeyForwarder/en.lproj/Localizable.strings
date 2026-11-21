@@ -38,3 +38,6 @@
 "Launch player hidden" = "Launch player hidden";
 "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front." = "When the prioritized Apple Music or Spotify is not running, a media key starts it hidden instead of bringing its window to the front.";
 "Optional" = "Optional";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Include Radiola when sending events to all players";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut.";

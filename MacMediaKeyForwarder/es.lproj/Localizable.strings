@@ -36,3 +36,6 @@
 "Cider API Token" = "Token de API de Cider";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Pega el token generado en Cider en Settings > Connectivity > Manage External Application Access to Cider. Déjalo vacío si el acceso externo no requiere token.";
 "Optional" = "Opcional";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Incluir Radiola al enviar eventos a todos los reproductores";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Reproducir/pausa también alterna Radiola enviando ⌃⌥⌘P. Graba primero ese atajo en Radiola en Ajustes > Controls; si no, puede activar el atajo de otra app.";

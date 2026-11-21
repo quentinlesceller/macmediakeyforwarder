@@ -36,3 +36,6 @@
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Вставьте токен, созданный в Cider в разделе Settings > Connectivity > Manage External Application Access to Cider. Оставьте поле пустым, если внешний доступ не требует токена.";
 "Open at login" = "Открывать при входе в систему";
 "Optional" = "Необязательно";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Включать Radiola при отправке событий всем плеерам";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Воспроизведение/пауза также переключает Radiola, отправляя ⌃⌥⌘P. Сначала задайте это сочетание в Radiola в разделе Настройки > Controls, иначе оно может сработать в другом приложении.";
