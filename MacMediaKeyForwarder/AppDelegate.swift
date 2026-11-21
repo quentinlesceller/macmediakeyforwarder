@@ -37,6 +37,8 @@ enum MediaKeysPrioritize: Int {
     case spotifast = 4
     // If several apps are open, prioritize Pear.
     case pear = 5
+    // If several apps are open, prioritize Radiola.
+    case radiola = 6
 }
 
 enum PauseState: Int {
@@ -100,6 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let ciderController = CiderController()
     private let spotifastController = SpotifastController()
     private let pearController = PearController()
+    private let radiolaController = RadiolaController()
     private let volumeQueue = DispatchQueue(label: "MacMediaKeyForwarder.volume")
     // Music's volume before the mute key set it to 0; accessed on volumeQueue.
     private var mutedMusicVolume: Int?
@@ -171,13 +174,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let ciderRunning = ciderController.isRunning
         let spotifastRunning = spotifastController.isRunning
         let pearRunning = pearController.isRunning
+        let radiolaRunning = radiolaController.isRunning
 
         if pauseState == .pause {
             return Unmanaged.passUnretained(event)
         }
 
+        // Radiola only takes play/pause, and only when it is prioritized or the
+        // user opted in to sending its shortcut to all players.
+        let radiolaTakesPlayPause = radiolaRunning &&
+            (mediaKeysPriority == .radiola || (mediaKeysPriority == .none && settings.radiolaInAllPlayers))
+
         if pauseState == .automatic {
-            if !spotifyRunning && !musicRunning && !ciderRunning && !spotifastRunning && !pearRunning {
+            let otherPlayerRunning = spotifyRunning || musicRunning || ciderRunning || spotifastRunning || pearRunning
+            // With Radiola as the only player open, let every key Radiola
+            // will not handle through, so Next and Previous still reach macOS.
+            if !otherPlayerRunning && !(radiolaTakesPlayPause && keyCode == NX_KEYTYPE_PLAY) {
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -271,6 +283,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 default:
                     break
                 }
+            case .radiola:
+                // Unlike the Apple Event players, a keystroke cannot launch
+                // Radiola, so there is nothing to do while it is closed.
+                if keyCode == NX_KEYTYPE_PLAY && radiolaTakesPlayPause {
+                    radiolaController.playPause()
+                }
             case .none:
                 switch keyCode {
                 case NX_KEYTYPE_PLAY:
@@ -279,6 +297,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     if ciderRunning { ciderController.playPause() }
                     if spotifastRunning { spotifastController.playPause() }
                     if pearRunning { pearController.playPause() }
+                    if radiolaTakesPlayPause { radiolaController.playPause() }
                 case NX_KEYTYPE_NEXT, NX_KEYTYPE_FAST:
                     if spotifyRunning { spotify?.nextTrack?() }
                     if musicRunning { music?.nextTrack?() }
@@ -540,6 +559,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Pear (YouTube Music)", comment: "Prioritize Pear (YouTube Music)"),
                                                 action: #selector(prioritizePear),
                                                 keyEquivalent: ""))
+        priorityOptionItems.append(menu.addItem(withTitle: NSLocalizedString("Prioritize Radiola", comment: "Prioritize Radiola"),
+                                                action: #selector(prioritizeRadiola),
+                                                keyEquivalent: ""))
 
         menu.addItem(NSMenuItem.separator()) // A thin grey line.
 
@@ -721,6 +743,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func prioritizePear() {
         settings.priority = .pear
+    }
+
+    @objc private func prioritizeRadiola() {
+        settings.priority = .radiola
     }
 
     // MARK: Settings window

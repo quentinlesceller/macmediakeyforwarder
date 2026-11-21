@@ -17,6 +17,7 @@
 "Prioritize Cider" = "Cider priorisieren";
 "Prioritize Spotifast" = "Spotifast priorisieren";
 "Prioritize Pear (YouTube Music)" = "Pear (YouTube Music) priorisieren";
+"Prioritize Radiola" = "Radiola priorisieren";
 "Set Cider API Token…" = "Cider-API-Token festlegen…";
 "Settings…" = "Einstellungen…";
 "Settings" = "Einstellungen";
@@ -35,3 +36,6 @@
 "Cider API Token" = "Cider-API-Token";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Füge das Token ein, das in Cider unter Settings > Connectivity > Manage External Application Access to Cider erzeugt wurde. Leer lassen, wenn der externe Zugriff kein Token erfordert.";
 "Optional" = "Optional";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Radiola einbeziehen, wenn Ereignisse an alle Player gesendet werden";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Wiedergabe/Pause schaltet auch Radiola um, indem ⌃⌥⌘P gesendet wird. Lege diesen Kurzbefehl zuerst in Radiola unter Einstellungen > Controls fest, sonst kann er den Kurzbefehl einer anderen App auslösen.";

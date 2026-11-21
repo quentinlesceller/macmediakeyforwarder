@@ -12,6 +12,7 @@
 "Prioritize Cider" = "Privilégier Cider";
 "Prioritize Spotifast" = "Privilégier Spotifast";
 "Prioritize Pear (YouTube Music)" = "Privilégier Pear (YouTube Music)";
+"Prioritize Radiola" = "Privilégier Radiola";
 "Set Cider API Token…" = "Définir le jeton d'API Cider…";
 "Cider API Token" = "Jeton d'API Cider";
 "Paste the token generated in Cider under Settings > Connectivity > Manage External Application Access to Cider. Leave empty if external access does not require a token." = "Collez le jeton généré dans Cider via Réglages > Connectivité > Gérer l'accès des applications externes à Cider. Laissez vide si l'accès externe ne requiert pas de jeton.";
@@ -29,3 +30,6 @@
 "Also send volume keys to Apple Music" = "Envoyer aussi les touches de volume à Apple Music";
 "Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers." = "Modifie le volume propre d'Apple Music en même temps que le volume du système, ce qui permet de contrôler les enceintes AirPlay avec les touches de volume.";
 "Optional" = "Facultatif";
+"Radiola" = "Radiola";
+"Include Radiola when sending events to all players" = "Inclure Radiola lors de l'envoi des événements à tous les lecteurs";
+"Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut." = "Lecture/pause bascule aussi Radiola en envoyant ⌃⌥⌘P. Enregistrez d'abord ce raccourci dans Radiola sous Réglages > Controls, sinon il peut déclencher le raccourci d'une autre app.";

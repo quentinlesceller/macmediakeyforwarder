@@ -136,6 +136,7 @@ private struct PlayersSettingsView: View {
                     Text("Prioritize Cider").tag(MediaKeysPrioritize.cider)
                     Text("Prioritize Spotifast").tag(MediaKeysPrioritize.spotifast)
                     Text("Prioritize Pear (YouTube Music)").tag(MediaKeysPrioritize.pear)
+                    Text("Prioritize Radiola").tag(MediaKeysPrioritize.radiola)
                 }
                 .pickerStyle(.radioGroup)
                 .labelsHidden()
@@ -148,6 +149,12 @@ private struct PlayersSettingsView: View {
                 Toggle(isOn: $settings.forwardVolumeToMusic) {
                     Text("Also send volume keys to Apple Music")
                     Text("Changes Apple Music's own volume together with the system volume, which lets the volume keys control AirPlay speakers.")
+                }
+            }
+            Section("Radiola") {
+                Toggle(isOn: $settings.radiolaInAllPlayers) {
+                    Text("Include Radiola when sending events to all players")
+                    Text("Play/pause also toggles Radiola by sending ⌃⌥⌘P. Record that shortcut in Radiola under Settings > Controls first, or it can trigger another app's shortcut.")
                 }
             }
             Section {

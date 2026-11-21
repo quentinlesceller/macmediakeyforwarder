@@ -22,6 +22,7 @@ final class AppSettings: ObservableObject {
     private static let hideFromMenuBarKey = "user_hide_from_menu_bar_option"
     private static let forwardVolumeToMusicKey = "user_forward_volume_to_music_option"
     private static let launchPlayerHiddenKey = "user_launch_hidden_option"
+    private static let radiolaInAllPlayersKey = "user_radiola_all_players_option"
 
     private let defaults = UserDefaults.standard
 
@@ -52,6 +53,13 @@ final class AppSettings: ObservableObject {
     /// forward.
     @Published var launchPlayerHidden: Bool {
         didSet { defaults.set(launchPlayerHidden, forKey: Self.launchPlayerHiddenKey) }
+    }
+
+    /// Also toggles Radiola when events go to all players. Off by default:
+    /// Radiola is driven by a global shortcut, and sending it before the user
+    /// has recorded it in Radiola could trigger another app's shortcut.
+    @Published var radiolaInAllPlayers: Bool {
+        didSet { defaults.set(radiolaInAllPlayers, forKey: Self.radiolaInAllPlayersKey) }
     }
 
     /// Token for Cider's external application access. Stored trimmed; an empty
@@ -95,6 +103,7 @@ final class AppSettings: ObservableObject {
         hideFromMenuBar = defaults.bool(forKey: Self.hideFromMenuBarKey)
         forwardVolumeToMusic = defaults.bool(forKey: Self.forwardVolumeToMusicKey)
         launchPlayerHidden = defaults.bool(forKey: Self.launchPlayerHiddenKey)
+        radiolaInAllPlayers = defaults.bool(forKey: Self.radiolaInAllPlayersKey)
         ciderApiToken = defaults.string(forKey: CiderController.apiTokenKey) ?? ""
     }
 }

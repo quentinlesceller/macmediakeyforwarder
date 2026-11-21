@@ -46,3 +46,14 @@ Volume keys to Apple Music :
         - volume keys shouldn't start Apple Music
     - select Prioritize Spotify
         - Apple Music's volume shouldn't change
+
+Radiola :
+    - record ⌃⌥⌘P in Radiola under Settings > Controls
+    - select Prioritize Radiola
+        - play/pause should toggle Radiola, next/prev should do nothing
+    - select Send events to all players
+        - with "Include Radiola when sending events to all players" off (default), play/pause shouldn't toggle Radiola or send ⌃⌥⌘P
+        - turn it on, play/pause should toggle Radiola
+    - select Pause if no player is running, close every player except Radiola
+        - next/prev should reach macOS ( try it with a youtube video in safari )
+        - play/pause should toggle Radiola only if it is prioritized or included in all players
