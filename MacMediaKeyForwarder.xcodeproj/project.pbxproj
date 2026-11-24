@@ -14,6 +14,8 @@
 		D1B0000000000000000000A6 /* SpotifastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A6 /* SpotifastController.swift */; };
 		D1B0000000000000000000A9 /* PearController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A9 /* PearController.swift */; };
 		D1B0000000000000000000AA /* RadiolaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000AA /* RadiolaController.swift */; };
+		D1B0000000000000000000AB /* TidalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000AB /* TidalController.swift */; };
+		D1B0000000000000000000AC /* MenuBarPresser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000AC /* MenuBarPresser.swift */; };
 		D1B0000000000000000000A7 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A7 /* AppSettings.swift */; };
 		D1B0000000000000000000A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A8 /* SettingsView.swift */; };
 		D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0000000000000000000A4 /* LaunchAtLogin.swift */; };
@@ -48,6 +50,8 @@
 		D1A0000000000000000000A6 /* SpotifastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifastController.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000A9 /* PearController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PearController.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000AA /* RadiolaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadiolaController.swift; sourceTree = "<group>"; };
+		D1A0000000000000000000AB /* TidalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TidalController.swift; sourceTree = "<group>"; };
+		D1A0000000000000000000AC /* MenuBarPresser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPresser.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000A7 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		D1A0000000000000000000A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		336F74511E07E136009BCC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 				D1A0000000000000000000A6 /* SpotifastController.swift */,
 				D1A0000000000000000000A9 /* PearController.swift */,
 				D1A0000000000000000000AA /* RadiolaController.swift */,
+				D1A0000000000000000000AB /* TidalController.swift */,
+				D1A0000000000000000000AC /* MenuBarPresser.swift */,
 				D1A0000000000000000000A7 /* AppSettings.swift */,
 				D1A0000000000000000000A8 /* SettingsView.swift */,
 				336F744E1E07E136009BCC1B /* Supporting Files */,
@@ -254,6 +260,8 @@
 				D1B0000000000000000000A6 /* SpotifastController.swift in Sources */,
 				D1B0000000000000000000A9 /* PearController.swift in Sources */,
 				D1B0000000000000000000AA /* RadiolaController.swift in Sources */,
+				D1B0000000000000000000AB /* TidalController.swift in Sources */,
+				D1B0000000000000000000AC /* MenuBarPresser.swift in Sources */,
 				D1B0000000000000000000A7 /* AppSettings.swift in Sources */,
 				D1B0000000000000000000A8 /* SettingsView.swift in Sources */,
 				D1B0000000000000000000A4 /* LaunchAtLogin.swift in Sources */,

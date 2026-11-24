@@ -57,3 +57,16 @@ Radiola :
     - select Pause if no player is running, close every player except Radiola
         - next/prev should reach macOS ( try it with a youtube video in safari )
         - play/pause should toggle Radiola only if it is prioritized or included in all players
+
+TIDAL :
+    - select Prioritize TIDAL, keep TIDAL in the background behind another app
+        - play/pause/prev/next should control TIDAL, TIDAL shouldn't come to the front and the frontmost app shouldn't react
+        - restart app and check if prioritize TIDAL remains selected
+    - with TIDAL's menus in a non-English language ( TIDAL > Settings > Language )
+        - play/pause/prev/next should still work
+    - select Send events to all players with TIDAL and Spotify playing
+        - play/pause should toggle both
+    - select Pause if no player is running, close every player except TIDAL
+        - play/pause/prev/next should control TIDAL
+    - quit TIDAL
+        - media keys shouldn't start TIDAL
