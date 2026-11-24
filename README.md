@@ -1,8 +1,8 @@
 # Mac Media Key Forwarder
 
-Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks), [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music), [Radiola](https://github.com/SokoloffA/radiola), [TIDAL](https://tidal.com) and [Deezer](https://www.deezer.com).
+Mac Media Key Forwarder for [Apple Music](https://www.apple.com/apple-music/), [Spotify](https://www.spotify.com), [Cider](https://cider.sh), [Spotifast](https://spotifast.rocks), [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music), [Radiola](https://github.com/SokoloffA/radiola) and [TIDAL](https://tidal.com).
 
-Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast, Pear (YouTube Music), Radiola, TIDAL or Deezer directly.
+Forwards your keyboard media keys (play/pause, next, previous) to Apple Music, Spotify, Cider, Spotifast, Pear (YouTube Music), Radiola or TIDAL directly.
 
 You can prioritize which app you would like to control or you can go with the default behaviour which controls the running app.
 
@@ -38,13 +38,13 @@ Radiola has no AppleScript dictionary or local API, so play/pause is sent throug
 
 Radiola plays live streams, so the next and previous keys do nothing while it is prioritized. With **Pause if no player is running** and Radiola as the only supported player open, next and previous are passed on to macOS.
 
-**TIDAL and Deezer support**
+**TIDAL support**
 
-TIDAL and Deezer ship neither an AppleScript dictionary nor a local control API. They do list play/pause, next and previous in their menu bar (TIDAL under **Playback**, Deezer under **Controls**), so Mac Media Key Forwarder presses those menu items through the Accessibility permission it already has. No setup is required, and the player can stay in the background. The menu items are recognized by their English titles, so this only works while the player's menus are in English.
+TIDAL ships neither an AppleScript dictionary nor a local control API. It does list play/pause, next and previous under **Playback** in its menu bar, so Mac Media Key Forwarder presses those menu items through the Accessibility permission it already has. No setup is required, and the player can stay in the background. The menu items are recognized by their English titles, so this only works while TIDAL's menus are in English.
 
 **Launch player hidden**
 
-When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast, Pear, Radiola, TIDAL and Deezer are never launched by Mac Media Key Forwarder.
+When a player is prioritized and not running, a media key press launches it. By default the player's window comes to the front. Enable **Launch player hidden** under **Settings… > Players** to start Apple Music or Spotify hidden (as with ⌘H) and send the key to it once it is up, so playback starts without leaving the app you are working in. Cider, Spotifast, Pear, Radiola and TIDAL are never launched by Mac Media Key Forwarder.
 
 Download the compiled application from my [Releases](https://github.com/quentinlesceller/macmediakeyforwarder/releases).
 

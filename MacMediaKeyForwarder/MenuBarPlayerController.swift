@@ -4,7 +4,7 @@
 //
 //  Controls players that offer neither an AppleScript dictionary nor a local
 //  control API, but do list their transport commands in the macOS menu bar
-//  (TIDAL under Playback, Deezer under Controls). The commands are triggered by
+//  (TIDAL under Playback). The commands are triggered by
 //  pressing those menu items through the Accessibility API, the same way a
 //  System Events "click menu item" script would. It works while the player is
 //  in the background and needs no extra permission: the app already requires
