@@ -35,11 +35,17 @@ struct AccessibilityMenu {
 
 final class MenuBarPresser {
 
+    // The timeout is set system-wide because a timeout set on one element doesn't cover the elements looked up from it.
+    private static let limitMessagingTimeout: Void = {
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1)
+    }()
+
     private let bundleIdentifier: String
     // Accessibility calls block until the target app answers, so they stay off the event tap.
     private let queue: DispatchQueue
 
     init(bundleIdentifier: String) {
+        _ = Self.limitMessagingTimeout
         self.bundleIdentifier = bundleIdentifier
         queue = DispatchQueue(label: "MenuBarPresser.\(bundleIdentifier)")
     }
@@ -47,9 +53,7 @@ final class MenuBarPresser {
     func press(_ select: @escaping ([AccessibilityMenu]) -> AccessibilityMenuItem?) {
         guard let pid = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first?.processIdentifier else { return }
         queue.async {
-            let application = AXUIElementCreateApplication(pid)
-            AXUIElementSetMessagingTimeout(application, 1)
-            guard let item = select(Self.menus(of: application)) else { return }
+            guard let item = select(Self.menus(of: AXUIElementCreateApplication(pid))) else { return }
             AXUIElementPerformAction(item.element, kAXPressAction as CFString)
         }
     }
