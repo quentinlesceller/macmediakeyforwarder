@@ -106,7 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let spotifastController = SpotifastController()
     private let pearController = PearController()
     private let radiolaController = RadiolaController()
-    private let tidalController = MenuBarPlayerController(bundleIdentifier: "com.tidal.desktop")
+    private let tidalController = TidalController()
     private let volumeQueue = DispatchQueue(label: "MacMediaKeyForwarder.volume")
     // Music's volume before the mute key set it to 0; accessed on volumeQueue.
     private var mutedMusicVolume: Int?

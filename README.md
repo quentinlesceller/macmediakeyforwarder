@@ -40,7 +40,7 @@ Radiola plays live streams, so the next and previous keys do nothing while it is
 
 **TIDAL support**
 
-TIDAL ships neither an AppleScript dictionary nor a local control API. It does list play/pause, next and previous under **Playback** in its menu bar, so Mac Media Key Forwarder presses those menu items through the Accessibility permission it already has. No setup is required, and the player can stay in the background. The menu items are recognized by their English titles, so this only works while TIDAL's menus are in English.
+TIDAL ships neither an AppleScript dictionary nor a local control API. It does list play/pause, next and previous under **Playback** in its menu bar, so Mac Media Key Forwarder presses those menu items through the Accessibility permission it already has. No setup is required, and the player can stay in the background. The menu items are recognized by their keyboard shortcuts, so this works whatever language TIDAL's menus are in.
 
 **Launch player hidden**
 
