@@ -108,6 +108,10 @@ Thank you!!!
 
 ---
 
+*What's new in version 4.7.0 :*
+
+- Control TIDAL in the background with play/pause, next, and previous. Select **Prioritize TIDAL** to send keys to TIDAL alone, or choose **Send events to all players** to include it alongside other running players. Thanks to @domenix! (#53)
+
 *What's new in version 4.6.0 :*
 - Added play/pause support for Radiola. Set its global toggle shortcut to ⌃⌥⌘P, then select Prioritize Radiola or include it under Settings > Players when sending events to all players. (#52)
 
